@@ -63,7 +63,8 @@
             android:layout_height="wrap_content"
             android:text="Confirmar"
             android:id="@+id/ButtonConfirmar"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            />
 
         <Button
             android:layout_width="wrap_content"
