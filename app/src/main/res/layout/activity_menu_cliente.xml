@@ -1,0 +1,77 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.estef.proyectoh_1.MenuCliente"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="MENU CLIENTE"
+        android:id="@+id/textView14"
+        android:layout_gravity="center_horizontal" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:touchscreenBlocksFocus="false">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reservación de Habitaciones"
+            android:id="@+id/button3"
+            android:background="#90b4ff"
+            android:onClick="reservar" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Promociones"
+            android:id="@+id/button4"
+            android:background="#f94d85e3"
+            android:allowUndo="false"
+            android:onClick="promociones" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Estado de Cuentas"
+            android:id="@+id/button5"
+            android:background="#90b4ff"
+            android:onClick="estadoCuenta" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="AMPLIAR RESERVACION"
+            android:id="@+id/button21"
+            android:background="#f94d85e3"
+            android:onClick="renovarReservacion" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Salir"
+            android:id="@+id/button6"
+            android:background="@android:color/darker_gray"
+            android:onClick="salirMenuCliente" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,101 @@
+<resources>
+    <string name="app_name">Proyecto2</string>
+    <string name="emptyString" />
+
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_logeo">Logeo</string>
+    <string name="title_activity_form_nuevo_usu">FormNuevoUsu</string>
+    <string name="title_activity_menu_cliente">MenuCliente</string>
+    <string name="title_activity_menu_admin">MenuAdmin</string>
+    <string name="title_activity_reservas_cliente">Reservacion Cliente</string>
+    <string name="title_activity_promociones">Promociones</string>
+    <string name="title_activity_estado_de_cuenta_cliente">EstadoDeCuentaCliente</string>
+    <string name="title_activity_habitaciones">Habitaciones</string>
+    <string name="title_activity_reservaciones_admin">ReservacionesAdmin</string>
+    <string name="title_activity_cliente_admin">Cliente_admin</string>
+
+    <string-array name="Habitaciones">
+        <item>" Habitacion1 "</item>
+        <item>" Habitacion2 "</item>
+        <item>" Habitacion3 "</item>
+        <item>" Habitacion4 "</item>
+        <item>" Habitacion5 "</item>
+        <item>" Habitacion6 "</item>
+        <item>" Habitacion7 "</item>
+        <item>" Habitacion8 "</item>
+        <item>" Habitacion9 "</item>
+        <item>" Habitacion10 "</item>
+        <item>" Habitacion11 "</item>
+    </string-array>
+    <string name="title_activity_admin_cliente">Admin_cliente</string>
+    <string name="title_activity_listado_cliente">ListadoCliente</string>
+    <string-array name="Clientes">
+        <item>" Cliente1 "</item>
+        <item>" Cliente2"</item>
+        <item>" Cliente3"</item>
+        <item>" Cliente4 "</item>
+        <item>" Cliente5 "</item>
+        <item>" Cliente6 "</item>
+        <item>" Cliente7 "</item>
+        <item>" Cliente8 "</item>
+        <item>" Cliente9 "</item>
+        <item>" Cliente10 "</item>
+
+    </string-array>
+
+    <string-array name="em">
+        <item>" empleado1 "</item>
+        <item>" empleado2 "</item>
+        <item>" empleado3 "</item>
+        <item>" empleado4 "</item>
+        <item>" empleado5 "</item>
+        <item>" empleado6 "</item>
+
+    </string-array>
+
+    <string-array name="promo">
+        <item>" No disponibles "</item>
+        <item>" ESPERELAS PRONTO "</item>
+    </string-array>
+
+    <string-array name="tipoHabitacion">
+        <item>" - - - - - - "</item>
+        <item>" 101 Sencilla $33 dia "</item>
+        <item>" 105 Doble $45 dia "</item>
+        <item>" 106 Matrimonial $55 dia "</item>
+        <item>" 109 Estudio $65 dia "</item>
+        <item>" 115 Suite $85 dia "</item>
+        <item>" 202 Sencilla $33 dia "</item>
+        <item>" 205 Doble $45 dia $45 dia "</item>
+        <item>" 306 Matrimonial $55 dia "</item>
+        <item>" 307 Sencilla $33 dia "</item>
+        <item>" 308 Doble $45 dia $45 dia "</item>
+        <item>" 309 Matrimonial $55 dia "</item>
+        <item>" 315 Estudio $65 dia "</item>
+        <item>" 316 Suite $85 dia "</item>
+        <item>" 402 Matrimonial $55 dia "</item>
+        <item>" 403 Sencilla $33 dia "</item>
+        <item>" 405 Doble $45 dia $45 dia "</item>
+        <item>" 406 Matrimonial $55 dia "</item>
+        <item>" 409 Estudio $65 dia "</item>
+        <item>" 411 Suite $85 dia "</item>
+        <item>" 412 Suite $85 dia "</item>
+        <item>" 415 Suite $85 dia "</item>
+        <item>" Penthouse $125 dia"</item>
+
+    </string-array>
+
+
+    <string name="title_activity_empleados">Empleados</string>
+    <string name="title_activity_confirmacion_reservacion_cliente">ConfirmacionReservacionCliente
+    </string>
+    <string name="title_activity_admin_reservacion">AdminReservacion</string>
+    <string name="title_activity_admin_reserva_vista">AdminReservaVista</string>
+    <string name="title_activity_habitacion">habitacion</string>
+    <string name="title_activity_ampliar_reserva">AmpliarReserva</string>
+    <string name="title_activity_mantenimiento_reservas">MantenimientoReservas</string>
+
+
+</resources>
