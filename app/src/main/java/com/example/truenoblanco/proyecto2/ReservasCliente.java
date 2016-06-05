@@ -30,7 +30,7 @@ public class ReservasCliente extends AppCompatActivity {
     String pers, hab, Dia, promoSTR, habSTR;
     Spinner spinnerPro, spinnerHab;
     EditText personas, habitaciones, dias, promociones, tipoHab,campoFecha;
-    Button BotonFecha;
+    Button BotonFecha,imagebutton;
     private static final  int TIPO_DIALOGO = 0;
     private static DatePickerDialog.OnDateSetListener oyenteSelectorFecha;
 
@@ -64,7 +64,6 @@ public class ReservasCliente extends AppCompatActivity {
         habitaciones = (EditText) findViewById(R.id.edtHabitacionReservacion);
         dias = (EditText) findViewById(R.id.edtDiasReservaReservacion);
         spinnerPro = (Spinner) findViewById(R.id.spPromociones);
-        spinnerHab = (Spinner) findViewById(R.id.spHabitacion);
 
         ArrayAdapter adapPromo = ArrayAdapter.createFromResource(this, R.array.promo, android.R.layout.simple_spinner_dropdown_item);
         ArrayAdapter adapHabitacion = ArrayAdapter.createFromResource(this, R.array.tipoHabitacion, android.R.layout.simple_spinner_dropdown_item);
@@ -79,7 +78,7 @@ public class ReservasCliente extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
                 // TODO Auto-generated method stub
                 int  pos=spinnerHab.getSelectedItemPosition()-1;
-                precio = obtenerPrecio(pos);
+                //precio = ;
                 Toast.makeText(getApplicationContext(), "selected "+ pos +" con precio "+precio, Toast.LENGTH_SHORT).show();
 
                 /**** do your code*****/
@@ -128,7 +127,6 @@ public class ReservasCliente extends AppCompatActivity {
         intent.putExtra("habitacion",hab);
         intent.putExtra("dias", Dia);
         intent.putExtra("promo", promoSTR);
-        intent.putExtra("tipoHab", habSTR);
         intent.putExtra("fecha",campoFecha.getText().toString());
         intent.putExtra("precio", String.valueOf(precio));
         startActivity(intent);
@@ -144,64 +142,12 @@ public class ReservasCliente extends AppCompatActivity {
         transaccion.setPersonas(Integer.parseInt(pers));
         transaccion.setHabitaciones(Integer.parseInt(hab));
         transaccion.setPromociones(promoSTR);
-        transaccion.setTipohabitacion(habSTR);
         helper.abrir();
         String regInsertados=helper.insertar(transaccion);
         helper.cerrar();
         Toast.makeText(this, regInsertados, Toast.LENGTH_SHORT).show();
     }
 
-
-    public float obtenerPrecio(int pos){
-        switch(pos){
-            case 0:
-                return precio = 33;
-            case 1:
-                return precio = 45;
-            case 2:
-                return precio = 55;
-            case 3:
-                return precio = 65;
-            case 4:
-                return precio = 85;
-            case 5:
-                return precio = 33;
-            case 6:
-                return precio = 45;
-            case 7:
-                return precio = 55;
-            case 8:
-                return precio = 33;
-            case 9:
-                return precio = 45;
-            case 10:
-                return precio = 55;
-            case 11:
-                return precio = 65;
-            case 12:
-                return precio = 85;
-            case 13:
-                return precio = 55;
-            case 14:
-                return precio = 33;
-            case 15:
-                return precio = 45;
-            case 16:
-                return precio = 55;
-            case 17:
-                return precio = 65;
-            case 18:
-                return precio = 85;
-            case 19:
-                return precio = 85;
-            case 20:
-                return precio = 85;
-            case 21:
-                return precio = 125;
-        }
-
-        return 0;
-        }
 
 
 

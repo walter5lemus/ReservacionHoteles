@@ -65,11 +65,10 @@ public class ConfirmacionReservacionCliente extends AppCompatActivity {
         habitacion = bundle.getString("habitacion");
         dias = bundle.getString("dias");
         promo = bundle.getString("promo");
-        tipoHabitacion = bundle.getString("tipoHab");
         fecha = bundle.getString("fecha");
         precio = bundle.getString("precio");
 
-        mensaje.setText("RESERVA POR "+dias+ " DIAS \n COMENZANDO EL DIA "+fecha+"\n HABITACION PARA "+persona +" PERSONAS \nHABITACION # "+tipoHabitacion+" \nCANTIDAD DE HABITACIONES " +habitacion+ " \nPROMOCION: "+promo);
+        mensaje.setText("RESERVA POR "+dias+ " DIAS \n COMENZANDO EL DIA "+fecha+"\n HABITACION PARA "+persona +" PERSONAS \nCANTIDAD DE HABITACIONES " +habitacion+ " \nPROMOCION: "+promo);
         mensaje2.setText("CON UN TOTAL A PAGAR DE");
         mensaje3.setText("$ "+precio);
 
