@@ -19,12 +19,13 @@ public class MenuCliente extends AppCompatActivity {
     public void reservar(View d){
         final ProgressDialog progressDialog = new ProgressDialog(this);
         Intent inicioReservar=new Intent(this,ReservasCliente.class);
-        progressDialog.dismiss();
-        startActivity(inicioReservar);
+
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Espere...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
+        startActivity(inicioReservar);
+        progressDialog.dismiss();
     }
     public void promociones(View d){
         Intent iniPromociones=new Intent(this,Promociones.class);

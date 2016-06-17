@@ -43,7 +43,8 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/campoFecha"
-            android:onClick="mostrarCalendario" />
+            android:onClick="mostrarCalendario"
+            android:layout_weight="0.29" />
 
         <Button
             android:layout_width="94dp"
@@ -67,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Dias de Reserva: "
+            android:text="Fecha Final"
             android:id="@+id/tvDiasReserva" />
 
         <EditText
@@ -75,8 +76,17 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:ems="10"
-            android:id="@+id/edtDiasReservaReservacion"
+            android:id="@+id/campoFecha2"
+            android:onClick="mostrarCalendario2"
             android:layout_weight="1" />
+
+        <Button
+            android:layout_width="103dp"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar Fecha"
+            android:id="@+id/botonFecha2"
+            android:textSize="9dp"
+            android:onClick="mostrarCalendario2" />
     </LinearLayout>
 
 
@@ -106,21 +116,6 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Habitaciones:   "
-            android:id="@+id/textView18" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/edtHabitacionReservacion"
-            android:layout_weight="1" />
 
     </LinearLayout>
 
@@ -156,111 +151,25 @@
             android:text="Seleccione habitación:                "
             android:id="@+id/textView19" />
 
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:weightSum="1">
-
-
-        <EditText
-            android:layout_width="73dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editSencilla"
-            android:layout_weight="0.02"
-            android:layout_gravity="bottom" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Habitacion Sencilla"
-            android:id="@+id/textView9"
-            android:layout_weight="0.95"
-            android:layout_gravity="center_vertical" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/imageButtonSencilla"
-            android:src="@mipmap/ayuda" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:weightSum="1">
-
-
-        <EditText
-            android:layout_width="73dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editDoble"
-            android:layout_weight="0.02"
-            android:layout_gravity="bottom" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Habitacion Doble"
-            android:id="@+id/textView10"
-            android:layout_weight="0.95"
-            android:layout_gravity="center_vertical" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageButtonDoble"
-            android:src="@mipmap/ayuda" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:weightSum="1">
-
-
-        <EditText
-            android:layout_width="73dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/editPresidencial"
-            android:layout_weight="0.02"
-            android:layout_gravity="bottom" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Habitacion Presidencial"
-            android:id="@+id/textView11"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1.21" />
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/imageButtonPresidencial"
-            android:src="@mipmap/ayuda" />
 
     </LinearLayout>
 
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sencilla"
+        android:id="@+id/checkBox"
+        android:checked="false" />
 
     <Button
         android:layout_width="380dp"
         android:layout_height="wrap_content"
         android:text="SIGUIENTE"
-        android:id="@+id/button7"
+        android:id="@+id/boton"
         android:layout_gravity="center_horizontal"
         android:onClick="avanzar" />
+
+
 </LinearLayout>
 </ScrollView>

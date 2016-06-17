@@ -1,10 +1,8 @@
 package com.example.truenoblanco.proyecto2.login;
 
-/**
- * Created by priya on 4/2/2015.
- */
+
 public class Contact {
-    String name ,email,uname,pass;
+    String name ,email,uname,pass,lastname;
 
     public void setName(String name)
     {
@@ -39,4 +37,11 @@ public class Contact {
         return this.pass;
     }
 
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
 }

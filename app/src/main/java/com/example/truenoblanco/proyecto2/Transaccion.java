@@ -1,4 +1,4 @@
-package com.example.truenoblanco.proyecto2.login;
+package com.example.truenoblanco.proyecto2;
 
 /**
  * Created by TruenoBlanco on 3/6/2016.

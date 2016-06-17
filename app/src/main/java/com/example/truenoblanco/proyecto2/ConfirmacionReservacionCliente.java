@@ -1,12 +1,18 @@
 package com.example.truenoblanco.proyecto2;
 
-import android.app.Activity;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,12 +22,17 @@ import com.paypal.android.sdk.payments.PayPalService;
 import com.paypal.android.sdk.payments.PaymentActivity;
 import com.example.truenoblanco.proyecto2.login.UtilPayPal;
 
+import org.json.JSONObject;
+
 import java.math.BigDecimal;
 
-public class ConfirmacionReservacionCliente extends AppCompatActivity {
+public class ConfirmacionReservacionCliente extends Activity {
 
     String persona, habitacion, dias, promo, tipoHabitacion,fecha,precio;
     TextView mensaje,mensaje2,mensaje3;
+
+    Conexion conn;
+    @SuppressLint("NewApi")
 
     private static final int REQUEST_CODE_PAYMENT = 1;
 
@@ -42,13 +53,18 @@ public class ConfirmacionReservacionCliente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmacion_reservacion_cliente);
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        conn=new Conexion();
+
         Intent intent = new Intent(this, PayPalService.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig);
         startService(intent);
 
-        mensaje = (TextView)findViewById(R.id.tvReservaConfor);
+      /*  mensaje = (TextView)findViewById(R.id.tvReservaConfor);
         mensaje2 = (TextView) findViewById(R.id.Precio);
-        mensaje3=(TextView) findViewById(R.id.precio2);
+        mensaje3=(TextView) findViewById(R.id.precio2);*/
 
         Button confirmar = (Button) findViewById(R.id.ButtonConfirmar);
         confirmar.setOnClickListener(new View.OnClickListener() {
@@ -61,18 +77,45 @@ public class ConfirmacionReservacionCliente extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
-        persona = bundle.getString("personas");
+/*        persona = bundle.getString("personas");
         habitacion = bundle.getString("habitacion");
         dias = bundle.getString("dias");
         promo = bundle.getString("promo");
         fecha = bundle.getString("fecha");
-        precio = bundle.getString("precio");
+        precio = bundle.getString("precio");*/
 
-        mensaje.setText("RESERVA POR "+dias+ " DIAS \n COMENZANDO EL DIA "+fecha+"\n HABITACION PARA "+persona +" PERSONAS \nCANTIDAD DE HABITACIONES " +habitacion+ " \nPROMOCION: "+promo);
+       /* mensaje.setText("RESERVA POR "+dias+ " DIAS \n COMENZANDO EL DIA "+fecha+"\n HABITACION PARA "+persona +" PERSONAS \nCANTIDAD DE HABITACIONES " +habitacion+ " \nPROMOCION: "+promo);
         mensaje2.setText("CON UN TOTAL A PAGAR DE");
-        mensaje3.setText("$ "+precio);
+        mensaje3.setText("$ "+precio);*/
 
     }
+
+   /* public void insertarTransaccion(View v) {
+
+
+
+
+
+        String url = null;
+        JSONObject datosNota = new JSONObject();
+        JSONObject nota = new JSONObject();
+
+        url ="";
+        if (v.getId()==R.id.ButtonConfirmar) url=conn.getURLLocal()+"/proyecto2/ws_db_insertar_docente.php"+ "?carnet=" + carnet + "&nombre="+
+                nombre+ "&apellido=" + apellido + "&tipocontrato=" + tipocontrato+"&correo="+correo+"&telefono="+telefono+
+                "&codigogrupo="+numeroDeGrupo+"&numerointegrante="+numeroDeIntegrantes+"&ano="+Año+"&tiporol="+rol;
+
+
+        int i = ControladorServicio.insertarNotaPHP(url, this);
+        if (i==1)
+            Toast.makeText(SWInsertarDocente.this, "Ingresado con Exito", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(SWInsertarDocente.this, "Error, No ha sido ingresado", Toast.LENGTH_SHORT).show();
+
+
+    }*/
+
+
 
     public void iniciar(View v){
         Intent intent = new Intent(this, MenuCliente.class);
@@ -115,5 +158,7 @@ public class ConfirmacionReservacionCliente extends AppCompatActivity {
             }
         }
     }
+
+
 
 }

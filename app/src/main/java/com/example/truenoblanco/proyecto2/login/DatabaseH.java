@@ -6,9 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-/**
- * Created by priya on 4/2/2015.
- */
+
 public class DatabaseH extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
@@ -49,6 +47,11 @@ public class DatabaseH extends SQLiteOpenHelper {
         db.insert(TABLE_NAME, null, values);
         db.close();
     }
+
+
+
+
+
 
     public String searchPass(String uname)
     {

@@ -2,12 +2,9 @@ package com.example.truenoblanco.proyecto2;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.example.truenoblanco.proyecto2.login.Transaccion;
 
 
 public class ControlBD {
@@ -33,8 +30,8 @@ public class ControlBD {
         public void onCreate(SQLiteDatabase db) {
             try{
                 db.execSQL("CREATE TABLE transaccion(id integer not null primary key autoincrement, " +
-                        "fecha VARCHAR(30) NOT NULL,dias integer,personas integer," +
-                        "habitaciones integer,promociones VARCHAR(30),tipohabitacion varchar(30));");
+                        "fechaInicio VARCHAR(30) NOT NULL,fechaFinal  Varchar(30) NOT NULL,personas integer NOT NULL," +
+                        "promociones VARCHAR(30),tipohabitacion varchar(30) NOT NULL);");
             }catch(SQLException e){
                 e.printStackTrace();
             }

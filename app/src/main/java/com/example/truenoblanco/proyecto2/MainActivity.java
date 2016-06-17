@@ -50,14 +50,15 @@ public class MainActivity extends ActionBarActivity {
                    if(pass.equals(password))
                    {
                        if(!str.equals("admin")){
-                           Intent i = new Intent(MainActivity.this, MenuCliente.class);
-                           i.putExtra("Username",str);
-                           startActivity(i);
                            final ProgressDialog progressDialog = new ProgressDialog(this);
                            progressDialog.setIndeterminate(true);
                            progressDialog.setMessage("Autenticando...");
                            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                            progressDialog.show();
+                           Intent i = new Intent(MainActivity.this, MenuCliente.class);
+                           i.putExtra("Username",str);
+                           startActivity(i);
+
                        }else{
 
                        }
