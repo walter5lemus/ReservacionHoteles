@@ -3,6 +3,8 @@ package com.example.truenoblanco.proyecto2;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,11 +18,16 @@ import com.example.truenoblanco.proyecto2.login.SignUp;
 
 public class MainActivity extends ActionBarActivity {
 
+    Conexion conn;
     DatabaseH helper = new DatabaseH(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        conn=new Conexion();
     }
 
 
@@ -39,7 +46,14 @@ public class MainActivity extends ActionBarActivity {
             String str = a.getText().toString();
             EditText b = (EditText)findViewById(R.id.TFpassword);
             String pass = b.getText().toString();
-            String password = helper.searchPass(str);
+            String url=null;
+
+
+            url=conn.getURLLocal()+"/etapa2/ws_db_buscarpass.php?nick=" + str + "&pass="+pass;
+
+            int ai = ControladorServicio.respuesta(url, this);
+            System.out.println(ai);
+
 
             if ( str.equals("") || pass.equals("")){
                 Toast temp = Toast.makeText(MainActivity.this, "Ingrese los campos mostrados!", Toast.LENGTH_SHORT);
@@ -47,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
             }
             else {
 
-                   if(pass.equals(password))
+                   if(ai==1)
                    {
                        if(!str.equals("admin")){
                            final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -58,6 +72,7 @@ public class MainActivity extends ActionBarActivity {
                            Intent i = new Intent(MainActivity.this, MenuCliente.class);
                            i.putExtra("Username",str);
                            startActivity(i);
+                           progressDialog.dismiss();
 
                        }else{
 
@@ -76,12 +91,18 @@ public class MainActivity extends ActionBarActivity {
         }
         if(v.getId() == R.id.Bsignup)
         {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Espere...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.show();
             Intent i = new Intent(MainActivity.this, SignUp.class);
             startActivity(i);
-
+            progressDialog.dismiss();
         }
 
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

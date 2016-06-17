@@ -5,6 +5,7 @@ package com.example.truenoblanco.proyecto2;
  */
 
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -101,27 +102,33 @@ public class ControladorServicio {
 
 
 
-    public static int insertarNotaPHP(String peticion, Context ctx) {
+    public static int respuesta(String peticion, Context ctx) {
 
         String json = obtenerRespuestaPeticion(peticion, ctx);
+        System.out.println(json);
         int i=1;
         try {
-            JSONObject resultado = new JSONObject(json);
+            JSONObject resultado  = new JSONObject(json);
             int respuesta = resultado.getInt("resultado");
 
 
             if (respuesta == 1){
-                Toast.makeText(ctx, "Registro ingresado", Toast.LENGTH_LONG).show();
-                i=0;
+                //Toast.makeText(ctx, "Registro ingresado", Toast.LENGTH_LONG).show();
 
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
+            e.getMessage();
+            return 0;
         }
 
         return i;
     }
+
+
+
+
 }
 
 

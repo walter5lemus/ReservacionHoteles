@@ -68,22 +68,26 @@ public class SignUp extends Activity {
                 }
                 else
                 {
-                    url="";
+                    url = "";
                     try{
-                    url=conn.getURLLocal()+"/etapa2/ws_db_insertarCliente.php?nick=" + unamestr + "&pass="+pass1str+ "&nombres=" + namestr + "&apellidos=" + lastname+"&correo="+emailstr;
+                        url=conn.getURLLocal()+"/etapa2/ws_db_insertarCliente.php?nick=" + unamestr + "&pass="+pass1str+ "&nombres=" + namestr + "&apellidos=" + lastname+"&correo="+emailstr;
 
-                    int ai = ControladorServicio.insertarNotaPHP(url, this);
+                        int i = ControladorServicio.respuesta(url, this);
+                        if (i == 1) {
+                            Toast.makeText(this, "Ingresado con Exito", Toast.LENGTH_SHORT).show();
+                            Intent a = new Intent(this, MainActivity.class);
+                            startActivity(a);
 
-                        Toast.makeText(this, "Ingresado con Exito", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(SignUp.this, MainActivity.class);
-                        startActivity(i);
+                        }
+                        else
+                            Toast.makeText(this, "Error, No ha sido ingresado", Toast.LENGTH_SHORT).show();
 
                     }catch(Exception e){
-                        Toast.makeText(this, "Error, No ha sido ingresado", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error, No ha sido ingresado2", Toast.LENGTH_SHORT).show();
                     }
-                }
             }
         }
+    }
     }
 
 }
