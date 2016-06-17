@@ -12,12 +12,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.truenoblanco.proyecto2.login.Contact;
 import com.example.truenoblanco.proyecto2.login.DatabaseH;
 import com.example.truenoblanco.proyecto2.login.SignUp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends ActionBarActivity {
-
+    static List<Contact> listaDocentes;
     Conexion conn;
     DatabaseH helper = new DatabaseH(this);
     @Override
@@ -28,6 +32,7 @@ public class MainActivity extends ActionBarActivity {
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
         conn=new Conexion();
+        listaDocentes = new ArrayList<Contact>();
     }
 
 
@@ -42,6 +47,11 @@ public class MainActivity extends ActionBarActivity {
     {
         if(v.getId() == R.id.Blogin)
         {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Autenticando...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.show();
             EditText a = (EditText)findViewById(R.id.TFusername);
             String str = a.getText().toString();
             EditText b = (EditText)findViewById(R.id.TFpassword);
@@ -50,34 +60,27 @@ public class MainActivity extends ActionBarActivity {
 
 
             url=conn.getURLLocal()+"/etapa2/ws_db_buscarpass.php?nick=" + str + "&pass="+pass;
-
-            int ai = ControladorServicio.respuesta(url, this);
-            System.out.println(ai);
-
-
+            String materiasExternas ="";
+            String pasw=null;
+            materiasExternas = ControladorServicio.obtenerRespuestaPeticion(url,this);
+            listaDocentes.addAll(ControladorServicio.obtenerpass(materiasExternas, this));
+            for (int i = 0; i < listaDocentes.size(); i++) {
+                       pasw=listaDocentes.get(i).getPass().toString();
+            }
+            //System.out.println(pasw);
             if ( str.equals("") || pass.equals("")){
                 Toast temp = Toast.makeText(MainActivity.this, "Ingrese los campos mostrados!", Toast.LENGTH_SHORT);
                 temp.show();
             }
             else {
 
-                   if(ai==1)
+                   if(pass.equals(pasw))
                    {
-                       if(!str.equals("admin")){
-                           final ProgressDialog progressDialog = new ProgressDialog(this);
-                           progressDialog.setIndeterminate(true);
-                           progressDialog.setMessage("Autenticando...");
-                           progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                           progressDialog.show();
+
                            Intent i = new Intent(MainActivity.this, MenuCliente.class);
                            i.putExtra("Username",str);
                            startActivity(i);
-                           progressDialog.dismiss();
-
-                       }else{
-
-                       }
-
+                       progressDialog.dismiss();
                    }
                    else
                    {
@@ -85,6 +88,7 @@ public class MainActivity extends ActionBarActivity {
                        temp.show();
                    }
                }
+
 
 
 

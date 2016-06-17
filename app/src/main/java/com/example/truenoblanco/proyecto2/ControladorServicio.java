@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.truenoblanco.proyecto2.login.Contact;
 import com.example.truenoblanco.proyecto2.login.SignUp;
 
 import org.apache.http.HttpEntity;
@@ -126,7 +127,30 @@ public class ControladorServicio {
         return i;
     }
 
+    public static List obtenerpass(String json, Context ctx) {
 
+        List<Contact> listaDocentes = new ArrayList<Contact>();
+
+        try {
+            JSONArray docentesJSON = new JSONArray(json);
+            for (int i = 0; i < docentesJSON.length(); i++) {
+
+                JSONObject obj = docentesJSON.getJSONObject(i);
+
+                Contact docente = new Contact();
+
+                docente.setUname(obj.getString("nick"));
+                docente.setPass(obj.getString("pass"));
+                listaDocentes.add(docente);
+            }
+            return listaDocentes;
+        } catch (Exception e) {
+            Toast.makeText(ctx, "Error en parseo de JSON", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+
+    }
 
 
 }
