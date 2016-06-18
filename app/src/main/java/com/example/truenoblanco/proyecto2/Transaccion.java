@@ -5,39 +5,23 @@ package com.example.truenoblanco.proyecto2;
  */
 public class Transaccion {
 
-    String fecha,promociones,tipohabitacion;
-    int dias,personas,habitaciones;
+   int id, idpromocion, personas;
+    String  fechaInicio, fechaFinal;
 
-    public String getFecha() {
-        return fecha;
+    public int getId() {
+        return id;
     }
 
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getPromociones() {
-        return promociones;
+    public int getIdpromocion() {
+        return idpromocion;
     }
 
-    public void setPromociones(String promociones) {
-        this.promociones = promociones;
-    }
-
-    public String getTipohabitacion() {
-        return tipohabitacion;
-    }
-
-    public void setTipohabitacion(String tipohabitacion) {
-        this.tipohabitacion = tipohabitacion;
-    }
-
-    public int getDias() {
-        return dias;
-    }
-
-    public void setDias(int dias) {
-        this.dias = dias;
+    public void setIdpromocion(int idpromocion) {
+        this.idpromocion = idpromocion;
     }
 
     public int getPersonas() {
@@ -48,11 +32,19 @@ public class Transaccion {
         this.personas = personas;
     }
 
-    public int getHabitaciones() {
-        return habitaciones;
+    public String getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setHabitaciones(int habitaciones) {
-        this.habitaciones = habitaciones;
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public String getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(String fechaFinal) {
+        this.fechaFinal = fechaFinal;
     }
 }

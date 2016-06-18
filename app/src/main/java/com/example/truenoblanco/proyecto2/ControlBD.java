@@ -51,7 +51,7 @@ public class ControlBD {
         DBHelper.close();
     }
 
-    public String insertar(Transaccion transaccion) {
+    /*public String insertar(Transaccion transaccion) {
 
         String regInsertados="Registro Insertado Nº= ";
         long contador=0;
@@ -75,7 +75,7 @@ public class ControlBD {
 
         return regInsertados;
 
-    }
+    }*/
 
 
 }

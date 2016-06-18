@@ -2,6 +2,7 @@
     <string name="app_name">Proyecto2</string>
     <string name="emptyString" />
 
+    <string name="facebook_app_id">857873447691521</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

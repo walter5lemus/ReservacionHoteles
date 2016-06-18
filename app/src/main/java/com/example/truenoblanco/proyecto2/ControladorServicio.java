@@ -97,11 +97,7 @@ public class ControladorServicio {
         }
 
         return respuesta;
-
-
     }
-
-
 
     public static int respuesta(String peticion, Context ctx) {
 
@@ -129,21 +125,21 @@ public class ControladorServicio {
 
     public static List obtenerpass(String json, Context ctx) {
 
-        List<Contact> listaDocentes = new ArrayList<Contact>();
+        List<Contact> listaClientes = new ArrayList<Contact>();
 
         try {
-            JSONArray docentesJSON = new JSONArray(json);
-            for (int i = 0; i < docentesJSON.length(); i++) {
+            JSONArray clientesJSON = new JSONArray(json);
+            for (int i = 0; i < clientesJSON.length(); i++) {
 
-                JSONObject obj = docentesJSON.getJSONObject(i);
+                JSONObject obj = clientesJSON.getJSONObject(i);
 
-                Contact docente = new Contact();
+                Contact cliente = new Contact();
 
-                docente.setUname(obj.getString("nick"));
-                docente.setPass(obj.getString("pass"));
-                listaDocentes.add(docente);
+                cliente.setUname(obj.getString("nick"));
+                cliente.setPass(obj.getString("pass"));
+                listaClientes.add(cliente);
             }
-            return listaDocentes;
+            return listaClientes;
         } catch (Exception e) {
             Toast.makeText(ctx, "Error en parseo de JSON", Toast.LENGTH_LONG)
                     .show();
@@ -151,8 +147,6 @@ public class ControladorServicio {
         }
 
     }
-
-
 }
 
 
