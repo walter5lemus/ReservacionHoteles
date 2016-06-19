@@ -1,12 +1,15 @@
 package com.example.truenoblanco.proyecto2;
 
+import java.util.Date;
+
 /**
  * Created by TruenoBlanco on 3/6/2016.
  */
 public class Transaccion {
 
-   int id, idpromocion, personas;
-    String  fechaInicio, fechaFinal;
+    int id,personas;
+    Date fechaInicio,fechaFinal;
+    String codHabitacion;
 
     public int getId() {
         return id;
@@ -14,14 +17,6 @@ public class Transaccion {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getIdpromocion() {
-        return idpromocion;
-    }
-
-    public void setIdpromocion(int idpromocion) {
-        this.idpromocion = idpromocion;
     }
 
     public int getPersonas() {
@@ -32,19 +27,29 @@ public class Transaccion {
         this.personas = personas;
     }
 
-    public String getFechaInicio() {
+    public Date getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(String fechaInicio) {
+    public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public String getFechaFinal() {
+
+
+    public Date getFechaFinal() {
         return fechaFinal;
     }
 
-    public void setFechaFinal(String fechaFinal) {
+    public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
+    }
+
+    public String getCodHabitacion() {
+        return codHabitacion;
+    }
+
+    public void setCodHabitacion(String codHabitacion) {
+        this.codHabitacion = codHabitacion;
     }
 }

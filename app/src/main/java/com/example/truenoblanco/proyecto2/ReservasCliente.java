@@ -16,6 +16,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -30,10 +33,13 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
     EditText personas, campoFecha,campoFecha2;
     Button BotonFecha,BotonFecha2;
     Calendar calendario,calendario2;
+    Date fechaActual;
     static List<Habitacion> listaHabitaciones;
+    static List<Transaccion> listaTransaccion;
+
     ListView listViewHabitaciones;
     Conexion conn;
-    static List<String> nombreDocentes;
+    static List<String> nombreHabitaciones;
 
     private DatePickerDialog.OnDateSetListener oyenteSelectorFecha;
     private DatePickerDialog.OnDateSetListener oyenteSelectorFecha2;
@@ -46,8 +52,10 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservas_cliente);
         helper = new ControlBD(this);
-        nombreDocentes = new ArrayList<String>();
+        fechaActual=new Date();
+        nombreHabitaciones = new ArrayList<String>();
         listaHabitaciones = new ArrayList<Habitacion>();
+        listaTransaccion = new ArrayList<Transaccion>();
         conn=new Conexion();
         progressDialog = new ProgressDialog(this);
 
@@ -55,8 +63,9 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         BotonFecha = (Button) findViewById(R.id.botonFecha);
         calendario = Calendar.getInstance();
         año = calendario.get(Calendar.YEAR);
-        mes = calendario.get(Calendar.MONTH);
+        mes = calendario.get(Calendar.MONTH)+1;
         dia = calendario.get(Calendar.DAY_OF_MONTH);
+
         mostrarFecha();
         oyenteSelectorFecha = new DatePickerDialog.OnDateSetListener()
         {
@@ -65,6 +74,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
                 año = year;
                 mes = MonthofYear+1;
                 dia = dayOfMonth;
+                calendario.set(año,mes,dia);
                 mostrarFecha();
             }
         };
@@ -73,18 +83,21 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         BotonFecha2 = (Button) findViewById(R.id.botonFecha2);
         calendario2 = Calendar.getInstance();
         año2 = calendario2.get(Calendar.YEAR);
-        mes2 = calendario2.get(Calendar.MONTH);
+        mes2 = calendario2.get(Calendar.MONTH)+1;
         dia2 = calendario2.get(Calendar.DAY_OF_MONTH)+1;
         mostrarFecha2();
+        calendario2.set(año2,mes2,dia2);
         oyenteSelectorFecha2 = new DatePickerDialog.OnDateSetListener(){
             @Override
-            public void onDateSet(DatePicker view,int year, int MonthofYear, int dayOfMonth){
-                año2 = year;
-                mes2 = MonthofYear+1;
-                dia2 = dayOfMonth;
+            public void onDateSet(DatePicker view,int year2, int MonthofYear2, int dayOfMonth2){
+                año2 = year2;
+                mes2 = MonthofYear2+1;
+                dia2 = dayOfMonth2;
+                calendario2.set(año2,mes2,dia2);
                 mostrarFecha2();
             }
         };
+
 
         personas = (EditText) findViewById(R.id.edtPersonaReservacion);
         spinnerPro = (Spinner) findViewById(R.id.spPromociones);
@@ -98,8 +111,8 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         url=conn.getURLLocal()+"/etapa2/ws_db_consultarHabitacion.php?disponible="+disponible;
 
         String materiasExternas ="";
+
         materiasExternas = ControladorServicio.obtenerRespuestaPeticion(url,this);
-        System.out.println(materiasExternas);
         try {
             listaHabitaciones.addAll(ControladorServicio.obtenerHabitacionesExternas(materiasExternas, this));
             actualizarListView();
@@ -108,61 +121,105 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         }
 
         listViewHabitaciones.setOnItemClickListener(this);
-        
 
+        String url1="";
+        url1=conn.getURLLocal()+"/etapa2/ws_db_consultarTransaccion.php";
+        String materiasExterna ="";
+        materiasExterna = ControladorServicio.obtenerRespuestaPeticion(url1,this);
+
+        try {
+            listaTransaccion.addAll(ControladorServicio.obtenerTransacciones(materiasExterna, this));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+       updateDisponible();
     }
+
+    public void updateDisponible(){
+        Transaccion transaccion = new Transaccion();
+        Habitacion habitacion= new Habitacion();
+
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");//dd/MM/yyyy
+        Date fechaActual = new Date();
+        fechaActual.getTime();
+
+        System.out.println(fechaActual);
+        Date fechaFinal;
+        for (int i = 0; i < listaTransaccion.size(); i++) {
+            fechaFinal = listaTransaccion.get(i).getFechaFinal();
+            if (fechaActual.after(fechaFinal)){
+                String url2="";
+                url2=conn.getURLLocal()+"/etapa2/ws_db_consultarTransaccion.php";
+                String materiasExterna ="";
+                materiasExterna = ControladorServicio.obtenerRespuestaPeticion(url2,this);
+
+            }else
+                System.out.println(fechaActual.toString()+ " es despues de "+fechaFinal.toString());
+
+
+
+        }
+    }
+
 
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        try{
+        Habitacion habPosition = listaHabitaciones.get(position);
+        int numPersona;
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Espere...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+       
             if(calendario.before(calendario2)){
-                progressDialog.setIndeterminate(true);
-                progressDialog.setMessage("Espere...");
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.show();
-                Class<?> clase=Class.forName("com.example.truenoblanco.proyecto2.ConfirmacionReservacionCliente");
-                Intent inte = new Intent(this,clase);
-                Habitacion group = listaHabitaciones.get(position);
 
-                //inte.putExtra("grupo",group);
-                this.startActivity(inte);
-            }
+                   try{
+                        numPersona = Integer.parseInt(personas.getText().toString());
+                        if(habPosition.getMaxPersonas()>=numPersona){
+                    Class<?> clase= null;
+                    try {
+                        clase = Class.forName("com.example.truenoblanco.proyecto2.ConfirmacionReservacionCliente");
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    Intent inte = new Intent(this,clase);
+                    this.startActivity(inte);
+                    }
+                    else{
+                    Toast.makeText(ReservasCliente.this, "El numero de personas excede al permitido", Toast.LENGTH_SHORT).show();
+                    }
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                        Toast.makeText(ReservasCliente.this, "LLene el campo fecha", Toast.LENGTH_SHORT).show();
+                    }
+
+            }else
+                Toast.makeText(ReservasCliente.this, "La fecha de inicio tiene que ser antes que la fecha final", Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
 
 
-        }catch(ClassNotFoundException e){
-            e.printStackTrace();
-        }
-        //progressDialog.dismiss();
     }
-
 
 
     private void actualizarListView() {
         String dato = "";
-        nombreDocentes.clear();
+        nombreHabitaciones.clear();
         for (int i = 0; i < listaHabitaciones.size(); i++) {
             dato = "Tipo Habitación:"+listaHabitaciones.get(i).getTipoHabitacion() + "\nDescripcion: "
-                    +listaHabitaciones.get(i).getDescripcion() + "\nPrecio: "
+                    +listaHabitaciones.get(i).getDescripcion() + "\nPrecio: $"
                     +listaHabitaciones.get(i).getPrecio();
 
-            nombreDocentes.add(dato);
+            nombreHabitaciones.add(dato);
         }
         //eliminarElementosDuplicados();
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, nombreDocentes);
+                android.R.layout.simple_list_item_1, nombreHabitaciones);
         listViewHabitaciones.setAdapter(adaptador);
     }
-    private void eliminarElementosDuplicados() {
-        HashSet<Habitacion> conjuntoMateria = new HashSet<Habitacion>();
-        conjuntoMateria.addAll(listaHabitaciones);
-        listaHabitaciones.clear();
-        listaHabitaciones.addAll(conjuntoMateria);
-        HashSet<String> conjuntoNombre = new HashSet<String>();
-        conjuntoNombre.addAll(nombreDocentes);
-        nombreDocentes.clear();
-        nombreDocentes.addAll(conjuntoNombre);
-    }
+
 
 
 

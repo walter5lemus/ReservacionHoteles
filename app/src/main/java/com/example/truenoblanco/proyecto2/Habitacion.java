@@ -6,7 +6,7 @@ package com.example.truenoblanco.proyecto2;
 public class Habitacion {
 
     float precio;
-    int disponible;
+    int disponible,maxPersonas;
     String codHabitacion,tipoHabitacion,descripcion;
 
     public float getPrecio() {
@@ -47,5 +47,13 @@ public class Habitacion {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public int getMaxPersonas() {
+        return maxPersonas;
+    }
+
+    public void setMaxPersonas(int maxPersonas) {
+        this.maxPersonas = maxPersonas;
     }
 }

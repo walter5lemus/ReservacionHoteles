@@ -28,7 +28,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ControladorServicio {
@@ -102,7 +105,7 @@ public class ControladorServicio {
     public static int respuesta(String peticion, Context ctx) {
 
         String json = obtenerRespuestaPeticion(peticion, ctx);
-        System.out.println(json);
+
         int i=1;
         try {
             JSONObject resultado  = new JSONObject(json);
@@ -165,11 +168,43 @@ public class ControladorServicio {
                 docente.setDescripcion(obj.getString("DESCRIPCION"));
                 docente.setPrecio(Float.parseFloat(obj.getString("PRECIO")));
                 docente.setDisponible(obj.getInt("DISPONIBLE"));
+                docente.setMaxPersonas(obj.getInt("MAXPERSONAS"));
                 listaDocentes.add(docente);
             }
             return listaDocentes;
         } catch (Exception e) {
             Toast.makeText(ctx, "Error en parseo de JSON", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+
+    }
+
+    public static List<Transaccion> obtenerTransacciones(String json, Context ctx) {
+
+        List<Transaccion> listaDocentes = new ArrayList<Transaccion>();
+        try {
+            JSONArray docentesJSON = new JSONArray(json);
+            for (int i = 0; i < docentesJSON.length(); i++) {
+
+                JSONObject obj = docentesJSON.getJSONObject(i);
+
+                Transaccion docente = new Transaccion();
+                Calendar calendario = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+
+                docente.setId(Integer.parseInt(obj.getString("ID")));
+                docente.setCodHabitacion(obj.getString("CODHABITACION"));
+                docente.setFechaInicio(Date.valueOf(obj.getString("FECHAINICIO")));
+                //System.out.println(docente.getFechaInicio().toString());
+                docente.setFechaFinal(Date.valueOf(obj.getString("FECHAFINAL")));
+                docente.setPersonas(obj.getInt("PERSONAS"));
+                listaDocentes.add(docente);
+            }
+            return listaDocentes;
+        } catch (Exception e) {
+            Toast.makeText(ctx, "Error en parseo de JSON Transaccion", Toast.LENGTH_LONG)
                     .show();
             return null;
         }
