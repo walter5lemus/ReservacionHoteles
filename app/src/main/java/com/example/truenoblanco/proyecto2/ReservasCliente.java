@@ -23,10 +23,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ReservasCliente extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     ControlBD helper;
+
     ProgressDialog progressDialog;
     int año,mes,dia,año2,mes2,dia2;
     Spinner spinnerPro;
@@ -36,6 +38,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
     Date fechaActual;
     static List<Habitacion> listaHabitaciones;
     static List<Transaccion> listaTransaccion;
+    String user;
 
     ListView listViewHabitaciones;
     Conexion conn;
@@ -45,6 +48,8 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
     private DatePickerDialog.OnDateSetListener oyenteSelectorFecha2;
     private static final  int TIPO_DIALOGO = 0;
     private static final  int TIPO_DIALOGO2 = 1;
+
+
 
 
     @Override
@@ -58,6 +63,10 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         listaTransaccion = new ArrayList<Transaccion>();
         conn=new Conexion();
         progressDialog = new ProgressDialog(this);
+        updateDisponible();
+
+        Bundle bundle = getIntent().getExtras();
+        user = bundle.getString("Username");
 
         campoFecha = (EditText) findViewById(R.id.campoFecha);
         BotonFecha = (Button) findViewById(R.id.botonFecha);
@@ -65,14 +74,14 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         año = calendario.get(Calendar.YEAR);
         mes = calendario.get(Calendar.MONTH)+1;
         dia = calendario.get(Calendar.DAY_OF_MONTH);
-
+        calendario.set(año,mes,dia);
         mostrarFecha();
         oyenteSelectorFecha = new DatePickerDialog.OnDateSetListener()
         {
             @Override
             public void onDateSet(DatePicker view,int year, int MonthofYear, int dayOfMonth){
                 año = year;
-                mes = MonthofYear+1;
+                mes = MonthofYear;
                 dia = dayOfMonth;
                 calendario.set(año,mes,dia);
                 mostrarFecha();
@@ -91,7 +100,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
             @Override
             public void onDateSet(DatePicker view,int year2, int MonthofYear2, int dayOfMonth2){
                 año2 = year2;
-                mes2 = MonthofYear2+1;
+                mes2 = MonthofYear2;
                 dia2 = dayOfMonth2;
                 calendario2.set(año2,mes2,dia2);
                 mostrarFecha2();
@@ -104,6 +113,9 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         ArrayAdapter adapPromo = ArrayAdapter.createFromResource(this, R.array.promo, android.R.layout.simple_spinner_dropdown_item);
         adapPromo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPro.setAdapter(adapPromo);
+
+;
+
 
         listViewHabitaciones = (ListView) findViewById(R.id.listView);
         int disponible = 1;
@@ -133,7 +145,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
             e.printStackTrace();
         }
 
-       updateDisponible();
+
     }
 
     public void updateDisponible(){
@@ -144,21 +156,17 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         Date fechaActual = new Date();
         fechaActual.getTime();
 
-        System.out.println(fechaActual);
         Date fechaFinal;
         for (int i = 0; i < listaTransaccion.size(); i++) {
             fechaFinal = listaTransaccion.get(i).getFechaFinal();
             if (fechaActual.after(fechaFinal)){
                 String url2="";
-                url2=conn.getURLLocal()+"/etapa2/ws_db_consultarTransaccion.php";
-                String materiasExterna ="";
-                materiasExterna = ControladorServicio.obtenerRespuestaPeticion(url2,this);
 
-            }else
-                System.out.println(fechaActual.toString()+ " es despues de "+fechaFinal.toString());
+                url2=conn.getURLLocal()+"/etapa2/ws_db_updateDisponible.php?codhabitacion="+listaTransaccion.get(i).getCodHabitacion();
+                String materiasExtern ="";
+                materiasExtern = ControladorServicio.obtenerRespuestaPeticion(url2,this);
 
-
-
+            }
         }
     }
 
@@ -166,26 +174,46 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Habitacion habPosition = listaHabitaciones.get(position);
+        Habitacion habitacion = listaHabitaciones.get(position);
+        //Transaccion transaccion = listaTransaccion;
         int numPersona;
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Espere...");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
-       
+
+        Float precio = habitacion.getPrecio();
+
+
+        long end = calendario2.getTimeInMillis();
+        long start = calendario.getTimeInMillis();
+        long dias= TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
+
             if(calendario.before(calendario2)){
 
                    try{
                         numPersona = Integer.parseInt(personas.getText().toString());
-                        if(habPosition.getMaxPersonas()>=numPersona){
+                        if(habitacion.getMaxPersonas()>=numPersona){
                     Class<?> clase= null;
                     try {
                         clase = Class.forName("com.example.truenoblanco.proyecto2.ConfirmacionReservacionCliente");
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
-                    Intent inte = new Intent(this,clase);
-                    this.startActivity(inte);
+
+                            precio = precio*dias;
+                            Intent inte = new Intent(this,clase);
+                            inte.putExtra("fechainicio",campoFecha.getText().toString());
+                            inte.putExtra("fechafinal",campoFecha2.getText().toString());
+                            inte.putExtra("personas",personas.getText().toString());
+                            inte.putExtra("tipohabitacion",habitacion.getTipoHabitacion());
+                            inte.putExtra("codhabitacion",habitacion.getCodHabitacion());
+                            inte.putExtra("precio",precio);
+                            inte.putExtra("Username",user);
+
+
+
+                            this.startActivity(inte);
                     }
                     else{
                     Toast.makeText(ReservasCliente.this, "El numero de personas excede al permitido", Toast.LENGTH_SHORT).show();
@@ -193,13 +221,11 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
                     }
                     catch (Exception e){
                         e.printStackTrace();
-                        Toast.makeText(ReservasCliente.this, "LLene el campo fecha", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ReservasCliente.this, "LLene el campo Personas", Toast.LENGTH_SHORT).show();
                     }
 
             }else
                 Toast.makeText(ReservasCliente.this, "La fecha de inicio tiene que ser antes que la fecha final", Toast.LENGTH_SHORT).show();
-        progressDialog.dismiss();
-
 
     }
 
@@ -214,7 +240,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
 
             nombreHabitaciones.add(dato);
         }
-        //eliminarElementosDuplicados();
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, nombreHabitaciones);
         listViewHabitaciones.setAdapter(adaptador);
@@ -246,10 +271,10 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
 
 
     public void mostrarFecha(){
-        campoFecha.setText(dia + "/" + mes + "/" + año);
+        campoFecha.setText(año+"-"+ mes+"-"+dia);
     }
     public void mostrarFecha2(){
-        campoFecha2.setText(dia2 + "/" + mes2 + "/" + año2);
+        campoFecha2.setText(año2+"-"+mes2+"-"+dia2);
     }
 
 

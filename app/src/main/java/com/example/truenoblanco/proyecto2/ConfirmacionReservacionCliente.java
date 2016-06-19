@@ -25,11 +25,18 @@ import com.example.truenoblanco.proyecto2.login.UtilPayPal;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ConfirmacionReservacionCliente extends Activity {
 
-    String persona, habitacion, dias, promo, tipoHabitacion,fecha,precio;
+    String persona,user;
+    String tipoHabitacion,codHabitacion;
+    String fechaInicio, fechaFinal;
+    Float precio;
     TextView mensaje,mensaje2,mensaje3;
+    Date fecha1;
+
 
     Conexion conn;
     @SuppressLint("NewApi")
@@ -62,66 +69,84 @@ public class ConfirmacionReservacionCliente extends Activity {
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig);
         startService(intent);
 
-      /*  mensaje = (TextView)findViewById(R.id.tvReservaConfor);
+        mensaje = (TextView)findViewById(R.id.tvReservaConfor);
         mensaje2 = (TextView) findViewById(R.id.Precio);
-        mensaje3=(TextView) findViewById(R.id.precio2);*/
+        mensaje3=(TextView) findViewById(R.id.precio2);
 
-        Button confirmar = (Button) findViewById(R.id.ButtonConfirmar);
+        /*Button confirmar = (Button) findViewById(R.id.ButtonConfirmar);
         confirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 pagar();
             }
-        });
-
+        });*/
+        try{
         Bundle bundle = getIntent().getExtras();
+        persona = bundle.getString("personas");
+        fechaInicio = bundle.getString("fechainicio");
+        fechaFinal = bundle.getString("fechafinal");
+        tipoHabitacion = bundle.getString("tipohabitacion");
+        precio = bundle.getFloat("precio");
+        codHabitacion = bundle.getString("codhabitacion");
+        user = bundle.getString("Username");
 
-/*        persona = bundle.getString("personas");
-        habitacion = bundle.getString("habitacion");
-        dias = bundle.getString("dias");
-        promo = bundle.getString("promo");
-        fecha = bundle.getString("fecha");
-        precio = bundle.getString("precio");*/
 
-       /* mensaje.setText("RESERVA POR "+dias+ " DIAS \n COMENZANDO EL DIA "+fecha+"\n HABITACION PARA "+persona +" PERSONAS \nCANTIDAD DE HABITACIONES " +habitacion+ " \nPROMOCION: "+promo);
-        mensaje2.setText("CON UN TOTAL A PAGAR DE");
-        mensaje3.setText("$ "+precio);*/
+
+
+        }
+        catch(Exception e){
+            e.getStackTrace();
+        }
+
+
+        mensaje.setText("RESERVA DESDE "+fechaInicio+ "\nHASTA "+fechaFinal+"\nPARA "+persona+"PERSONAS\nTIPO DE HABITACION "+tipoHabitacion+"\nNUMERO DE HABITACION "+codHabitacion);
+        mensaje2.setText("CON UN TOTAL A PAGAR DE \n");
+        mensaje3.setText("$"+precio);
+
+
 
     }
 
-   /* public void insertarTransaccion(View v) {
+    public void insertarTransaccion(View v) {
+        try{
+            String url = null;
+            url ="";
+            if (v.getId()==R.id.ButtonConfirmar) url=conn.getURLLocal()+"/etapa2/ws_db_insertarTransaccion.php?codhabitacion=" + codHabitacion + "&fechainicio="+
+                    fechaInicio+ "&fechafinal=" + fechaFinal + "&personas=" + persona+ "&username=" + user;
 
 
+            int i = ControladorServicio.respuesta(url, this);
+            if (i==1)
+            Toast.makeText(this, "Ingresado con Exito", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, "Error, No ha sido ingresado", Toast.LENGTH_SHORT).show();
+        }   catch(Exception e){
+            e.getStackTrace();
+        }
 
-
-
-        String url = null;
-        JSONObject datosNota = new JSONObject();
-        JSONObject nota = new JSONObject();
-
-        url ="";
-        if (v.getId()==R.id.ButtonConfirmar) url=conn.getURLLocal()+"/proyecto2/ws_db_insertar_docente.php"+ "?carnet=" + carnet + "&nombre="+
-                nombre+ "&apellido=" + apellido + "&tipocontrato=" + tipocontrato+"&correo="+correo+"&telefono="+telefono+
-                "&codigogrupo="+numeroDeGrupo+"&numerointegrante="+numeroDeIntegrantes+"&ano="+Año+"&tiporol="+rol;
-
-
-        int i = ControladorServicio.insertarNotaPHP(url, this);
-        if (i==1)
-            Toast.makeText(SWInsertarDocente.this, "Ingresado con Exito", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(SWInsertarDocente.this, "Error, No ha sido ingresado", Toast.LENGTH_SHORT).show();
-
-
-    }*/
-
-
-
-    public void iniciar(View v){
-        Intent intent = new Intent(this, MenuCliente.class);
-        startActivity(intent);
 
     }
+
+    public void regresar(View v){
+        if (v.getId()==R.id.brnRegresarConfirmacion){
+
+            Class<?> clase= null;
+            try {
+                clase = Class.forName("com.example.truenoblanco.proyecto2.ReservasCliente");
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            Intent inte = new Intent(this,clase);
+            inte.putExtra("Username",user);
+            startActivity(inte);
+
+
+        }
+
+    }
+
 
     public void pagar(){
 

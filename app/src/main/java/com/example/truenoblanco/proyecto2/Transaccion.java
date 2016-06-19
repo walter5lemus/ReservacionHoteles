@@ -9,6 +9,7 @@ public class Transaccion {
 
     int id,personas;
     Date fechaInicio,fechaFinal;
+    String fecha1,fecha2;
     String codHabitacion;
 
     public int getId() {
@@ -35,8 +36,6 @@ public class Transaccion {
         this.fechaInicio = fechaInicio;
     }
 
-
-
     public Date getFechaFinal() {
         return fechaFinal;
     }
@@ -51,5 +50,21 @@ public class Transaccion {
 
     public void setCodHabitacion(String codHabitacion) {
         this.codHabitacion = codHabitacion;
+    }
+
+    public String getFecha1() {
+        return fecha1;
+    }
+
+    public void setFecha1(String fecha1) {
+        this.fecha1 = fecha1;
+    }
+
+    public String getFecha2() {
+        return fecha2;
+    }
+
+    public void setFecha2(String fecha2) {
+        this.fecha2 = fecha2;
     }
 }

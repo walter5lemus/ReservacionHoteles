@@ -192,12 +192,9 @@ public class ControladorServicio {
                 Transaccion docente = new Transaccion();
                 Calendar calendario = Calendar.getInstance();
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-
                 docente.setId(Integer.parseInt(obj.getString("ID")));
                 docente.setCodHabitacion(obj.getString("CODHABITACION"));
                 docente.setFechaInicio(Date.valueOf(obj.getString("FECHAINICIO")));
-                //System.out.println(docente.getFechaInicio().toString());
                 docente.setFechaFinal(Date.valueOf(obj.getString("FECHAFINAL")));
                 docente.setPersonas(obj.getInt("PERSONAS"));
                 listaDocentes.add(docente);
@@ -205,6 +202,52 @@ public class ControladorServicio {
             return listaDocentes;
         } catch (Exception e) {
             Toast.makeText(ctx, "Error en parseo de JSON Transaccion", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+
+    }
+
+    public static List<Transaccion> obtenertransaccionesUserExterno(String json, Context ctx) {
+
+        List<Transaccion> listaTransaccion = new ArrayList<Transaccion>();
+
+        try {
+            JSONArray docentesJSON = new JSONArray(json);
+            for (int i = 0; i < docentesJSON.length(); i++) {
+                JSONObject obj = docentesJSON.getJSONObject(i);
+                Transaccion transaccion = new Transaccion();
+                transaccion.setCodHabitacion(obj.getString("codhabitacion"));
+                transaccion.setFecha1(obj.getString("fechainicio"));
+                transaccion.setFecha2(obj.getString("fechafinal"));
+                transaccion.setPersonas(obj.getInt("personas"));
+                listaTransaccion.add(transaccion);
+            }
+            return listaTransaccion;
+        } catch (Exception e) {
+            e.getStackTrace();
+            Toast.makeText(ctx, "Error en parseo de JSON1", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+
+    }
+    public static List<Habitacion> obtenertransaccionesUserExterno1(String json, Context ctx) {
+
+        List<Habitacion> listaHabitacion = new ArrayList<Habitacion>();
+
+        try {
+            JSONArray docentesJSON = new JSONArray(json);
+            for (int i = 0; i < docentesJSON.length(); i++) {
+
+                JSONObject obj = docentesJSON.getJSONObject(i);
+                Habitacion habitacion = new Habitacion();
+                habitacion.setTipoHabitacion(obj.getString("tipohabitacion"));
+                listaHabitacion.add(habitacion);
+            }
+            return listaHabitacion;
+        } catch (Exception e) {
+            Toast.makeText(ctx, "Error en parseo de JSON2", Toast.LENGTH_LONG)
                     .show();
             return null;
         }
