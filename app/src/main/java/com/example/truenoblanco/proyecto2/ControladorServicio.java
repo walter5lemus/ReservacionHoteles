@@ -147,6 +147,34 @@ public class ControladorServicio {
         }
 
     }
+
+    public static List<Habitacion> obtenerHabitacionesExternas(String json, Context ctx) {
+
+        List<Habitacion> listaDocentes = new ArrayList<Habitacion>();
+
+        try {
+            JSONArray docentesJSON = new JSONArray(json);
+            for (int i = 0; i < docentesJSON.length(); i++) {
+
+                JSONObject obj = docentesJSON.getJSONObject(i);
+
+                Habitacion docente = new Habitacion();
+
+                docente.setCodHabitacion(obj.getString("CODHABITACION"));
+                docente.setTipoHabitacion(obj.getString("TIPOHABITACION"));
+                docente.setDescripcion(obj.getString("DESCRIPCION"));
+                docente.setPrecio(Float.parseFloat(obj.getString("PRECIO")));
+                docente.setDisponible(obj.getInt("DISPONIBLE"));
+                listaDocentes.add(docente);
+            }
+            return listaDocentes;
+        } catch (Exception e) {
+            Toast.makeText(ctx, "Error en parseo de JSON", Toast.LENGTH_LONG)
+                    .show();
+            return null;
+        }
+
+    }
 }
 
 

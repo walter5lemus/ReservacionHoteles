@@ -155,20 +155,16 @@
     </LinearLayout>
 
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sencilla"
-        android:id="@+id/checkBox"
-        android:checked="false" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="216dp">
 
-    <Button
-        android:layout_width="380dp"
-        android:layout_height="wrap_content"
-        android:text="SIGUIENTE"
-        android:id="@+id/boton"
-        android:layout_gravity="center_horizontal"
-        android:onClick="avanzar" />
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="246dp"
+            android:id="@+id/listView" />
+    </LinearLayout>
 
 
 </LinearLayout>

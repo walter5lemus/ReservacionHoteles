@@ -59,7 +59,12 @@ public class MainActivity extends ActionBarActivity {
                                 + "\n" +
                                 "Auth Token: "
                                 + loginResult.getAccessToken().getToken()
+
                 );
+                Intent i = new Intent(MainActivity.this, MenuCliente.class);
+                startActivity(i);
+
+
             }
 
             @Override

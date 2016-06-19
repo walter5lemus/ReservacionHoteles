@@ -2,6 +2,7 @@ package com.example.truenoblanco.proyecto2;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,20 +12,28 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.List;
 
-public class ReservasCliente extends AppCompatActivity {
+public class ReservasCliente extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     ControlBD helper;
+    ProgressDialog progressDialog;
     int año,mes,dia,año2,mes2,dia2;
-    String pers, hab, Dia, promoSTR, habSTR;
-    Spinner spinnerPro, spinnerHab;
-    EditText personas, habitaciones, dias,campoFecha,campoFecha2;
+    Spinner spinnerPro;
+    EditText personas, campoFecha,campoFecha2;
     Button BotonFecha,BotonFecha2;
     Calendar calendario,calendario2;
+    static List<Habitacion> listaHabitaciones;
+    ListView listViewHabitaciones;
+    Conexion conn;
+    static List<String> nombreDocentes;
 
     private DatePickerDialog.OnDateSetListener oyenteSelectorFecha;
     private DatePickerDialog.OnDateSetListener oyenteSelectorFecha2;
@@ -37,6 +46,10 @@ public class ReservasCliente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservas_cliente);
         helper = new ControlBD(this);
+        nombreDocentes = new ArrayList<String>();
+        listaHabitaciones = new ArrayList<Habitacion>();
+        conn=new Conexion();
+        progressDialog = new ProgressDialog(this);
 
         campoFecha = (EditText) findViewById(R.id.campoFecha);
         BotonFecha = (Button) findViewById(R.id.botonFecha);
@@ -79,12 +92,76 @@ public class ReservasCliente extends AppCompatActivity {
         adapPromo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPro.setAdapter(adapPromo);
 
-        if(calendario.before(calendario2)){
-            final int si=1;
+        listViewHabitaciones = (ListView) findViewById(R.id.listView);
+        int disponible = 1;
+        String url="";
+        url=conn.getURLLocal()+"/etapa2/ws_db_consultarHabitacion.php?disponible="+disponible;
+
+        String materiasExternas ="";
+        materiasExternas = ControladorServicio.obtenerRespuestaPeticion(url,this);
+        System.out.println(materiasExternas);
+        try {
+            listaHabitaciones.addAll(ControladorServicio.obtenerHabitacionesExternas(materiasExternas, this));
+            actualizarListView();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        listViewHabitaciones.setOnItemClickListener(this);
+        
+
+    }
 
 
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        try{
+            if(calendario.before(calendario2)){
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Espere...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
+                Class<?> clase=Class.forName("com.example.truenoblanco.proyecto2.ConfirmacionReservacionCliente");
+                Intent inte = new Intent(this,clase);
+                Habitacion group = listaHabitaciones.get(position);
+
+                //inte.putExtra("grupo",group);
+                this.startActivity(inte);
+            }
+
+
+        }catch(ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        //progressDialog.dismiss();
+    }
+
+
+
+    private void actualizarListView() {
+        String dato = "";
+        nombreDocentes.clear();
+        for (int i = 0; i < listaHabitaciones.size(); i++) {
+            dato = "Tipo Habitación:"+listaHabitaciones.get(i).getTipoHabitacion() + "\nDescripcion: "
+                    +listaHabitaciones.get(i).getDescripcion() + "\nPrecio: "
+                    +listaHabitaciones.get(i).getPrecio();
+
+            nombreDocentes.add(dato);
+        }
+        //eliminarElementosDuplicados();
+        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, nombreDocentes);
+        listViewHabitaciones.setAdapter(adaptador);
+    }
+    private void eliminarElementosDuplicados() {
+        HashSet<Habitacion> conjuntoMateria = new HashSet<Habitacion>();
+        conjuntoMateria.addAll(listaHabitaciones);
+        listaHabitaciones.clear();
+        listaHabitaciones.addAll(conjuntoMateria);
+        HashSet<String> conjuntoNombre = new HashSet<String>();
+        conjuntoNombre.addAll(nombreDocentes);
+        nombreDocentes.clear();
+        nombreDocentes.addAll(conjuntoNombre);
     }
 
 
