@@ -114,9 +114,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         adapPromo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPro.setAdapter(adapPromo);
 
-;
-
-
         listViewHabitaciones = (ListView) findViewById(R.id.listView);
         int disponible = 1;
         String url="";
@@ -149,9 +146,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
     }
 
     public void updateDisponible(){
-        Transaccion transaccion = new Transaccion();
-        Habitacion habitacion= new Habitacion();
-
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");//dd/MM/yyyy
         Date fechaActual = new Date();
         fechaActual.getTime();
@@ -161,11 +155,8 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
             fechaFinal = listaTransaccion.get(i).getFechaFinal();
             if (fechaActual.after(fechaFinal)){
                 String url2="";
-
                 url2=conn.getURLLocal()+"/etapa2/ws_db_updateDisponible.php?codhabitacion="+listaTransaccion.get(i).getCodHabitacion();
-                String materiasExtern ="";
-                materiasExtern = ControladorServicio.obtenerRespuestaPeticion(url2,this);
-
+                ControladorServicio.obtenerRespuestaPeticion(url2,this);
             }
         }
     }
@@ -175,7 +166,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         Habitacion habitacion = listaHabitaciones.get(position);
-        //Transaccion transaccion = listaTransaccion;
         int numPersona;
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Espere...");
@@ -183,7 +173,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         progressDialog.show();
 
         Float precio = habitacion.getPrecio();
-
 
         long end = calendario2.getTimeInMillis();
         long start = calendario.getTimeInMillis();
@@ -229,7 +218,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
 
     }
 
-
     private void actualizarListView() {
         String dato = "";
         nombreHabitaciones.clear();
@@ -244,10 +232,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
                 android.R.layout.simple_list_item_1, nombreHabitaciones);
         listViewHabitaciones.setAdapter(adaptador);
     }
-
-
-
-
 
     @Override
     public Dialog onCreateDialog(int id){
@@ -268,33 +252,11 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         showDialog(TIPO_DIALOGO2);
     }
 
-
-
     public void mostrarFecha(){
         campoFecha.setText(año+"-"+ mes+"-"+dia);
     }
     public void mostrarFecha2(){
         campoFecha2.setText(año2+"-"+mes2+"-"+dia2);
     }
-
-
-    public void avanzar(View v) {
-
-
-        if(calendario.after(calendario2)){
-            Intent intent=new Intent(this, ConfirmacionReservacionCliente.class);
-
-            startActivity(intent);
-
-        }
-        else
-            Toast.makeText(ReservasCliente.this, "La Fecha Final no puede ser antes que la Fecha de Inicio", Toast.LENGTH_SHORT).show();
-
-
-
-
-    }
-
-
 
 }

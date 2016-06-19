@@ -1,16 +1,21 @@
 package com.example.truenoblanco.proyecto2;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class ConsultarTransacciones extends AppCompatActivity {
+public class ConsultarTransacciones extends AppCompatActivity implements AdapterView.OnItemClickListener  {
 
     static List<Transaccion> listaTransaccion;
     static List<Habitacion> listaHabitacion;
@@ -74,5 +79,18 @@ public class ConsultarTransacciones extends AppCompatActivity {
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, nombreDocentes);
         listViewDocentes.setAdapter(adaptador);
+        listViewDocentes.setOnItemClickListener(this);
+    }
+
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        String url="";
+        url=conn.getURLLocal()+"/etapa2/ws_db_consultarTransaccionUser.php?nick="+user;
+        System.out.println(user);
+        String materiasExternas ="";
+        materiasExternas = ControladorServicio.obtenerRespuestaPeticion(url,this);
+        System.out.println(materiasExternas);
+
+
     }
 }
