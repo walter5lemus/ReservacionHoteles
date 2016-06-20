@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.paypal.android.sdk.C;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +36,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
     Spinner spinnerPro;
     EditText personas, campoFecha,campoFecha2;
     Button BotonFecha,BotonFecha2;
-    Calendar calendario,calendario2;
+    Calendar calendario,calendario2,actual;
     Date fechaActual;
     static List<Habitacion> listaHabitaciones;
     static List<Transaccion> listaTransaccion;
@@ -49,10 +51,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
     private static final  int TIPO_DIALOGO = 0;
     private static final  int TIPO_DIALOGO2 = 1;
 
-
-
-
-    @Override
+  @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservas_cliente);
@@ -69,12 +68,13 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         user = bundle.getString("Username");
 
         campoFecha = (EditText) findViewById(R.id.campoFecha);
-        BotonFecha = (Button) findViewById(R.id.botonFecha);
         calendario = Calendar.getInstance();
         año = calendario.get(Calendar.YEAR);
         mes = calendario.get(Calendar.MONTH)+1;
         dia = calendario.get(Calendar.DAY_OF_MONTH);
         calendario.set(año,mes,dia);
+         actual = Calendar.getInstance();
+         actual.set(año,mes,dia);
         mostrarFecha();
         oyenteSelectorFecha = new DatePickerDialog.OnDateSetListener()
         {
@@ -109,10 +109,9 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
 
 
         personas = (EditText) findViewById(R.id.edtPersonaReservacion);
-        spinnerPro = (Spinner) findViewById(R.id.spPromociones);
         ArrayAdapter adapPromo = ArrayAdapter.createFromResource(this, R.array.promo, android.R.layout.simple_spinner_dropdown_item);
         adapPromo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPro.setAdapter(adapPromo);
+
 
         listViewHabitaciones = (ListView) findViewById(R.id.listView);
         int disponible = 1;
@@ -167,10 +166,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
 
         Habitacion habitacion = listaHabitaciones.get(position);
         int numPersona;
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Espere...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.show();
+
 
         Float precio = habitacion.getPrecio();
 
@@ -179,7 +175,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         long dias= TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
 
             if(calendario.before(calendario2)){
-
                    try{
                         numPersona = Integer.parseInt(personas.getText().toString());
                         if(habitacion.getMaxPersonas()>=numPersona){
@@ -189,7 +184,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
-
                             precio = precio*dias;
                             Intent inte = new Intent(this,clase);
                             inte.putExtra("fechainicio",campoFecha.getText().toString());
@@ -199,10 +193,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
                             inte.putExtra("codhabitacion",habitacion.getCodHabitacion());
                             inte.putExtra("precio",precio);
                             inte.putExtra("Username",user);
-
-
-
-                            this.startActivity(inte);
+                           this.startActivity(inte);
                     }
                     else{
                     Toast.makeText(ReservasCliente.this, "El numero de personas excede al permitido", Toast.LENGTH_SHORT).show();
@@ -215,7 +206,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
 
             }else
                 Toast.makeText(ReservasCliente.this, "La fecha de inicio tiene que ser antes que la fecha final", Toast.LENGTH_SHORT).show();
-
     }
 
     private void actualizarListView() {

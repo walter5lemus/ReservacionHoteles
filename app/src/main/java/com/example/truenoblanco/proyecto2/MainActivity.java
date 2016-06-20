@@ -113,7 +113,6 @@ public class MainActivity extends ActionBarActivity {
                 int password;
 
                 password = ControladorServicio.respuesta(url,this);
-                System.out.println(password);
 
                 if ( str.equals("") || pass.equals("")){
                     Toast temp = Toast.makeText(MainActivity.this, "Ingrese los campos mostrados!", Toast.LENGTH_SHORT);

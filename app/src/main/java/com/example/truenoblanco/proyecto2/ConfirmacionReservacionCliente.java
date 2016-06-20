@@ -117,8 +117,22 @@ public class ConfirmacionReservacionCliente extends Activity {
 
 
             int i = ControladorServicio.respuesta(url, this);
-            if (i==1)
-            Toast.makeText(this, "Ingresado con Exito", Toast.LENGTH_SHORT).show();
+            if (i==1){
+                String url2="";
+                url2=conn.getURLLocal()+"/etapa2/ws_db_updateNoDisponible.php?codhabitacion="+codHabitacion;
+                ControladorServicio.obtenerRespuestaPeticion(url2,this);
+                Toast.makeText(this, "Ingresado con Exito", Toast.LENGTH_SHORT).show();
+                Class<?> clase= null;
+                try {
+                    clase = Class.forName("com.example.truenoblanco.proyecto2.MenuCliente");
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                Intent inte = new Intent(this,clase);
+                inte.putExtra("Username",user);
+                this.startActivity(inte);
+            }
             else
                 Toast.makeText(this, "Error, No ha sido ingresado", Toast.LENGTH_SHORT).show();
         }   catch(Exception e){
