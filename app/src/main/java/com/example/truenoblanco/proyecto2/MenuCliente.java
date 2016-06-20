@@ -17,6 +17,7 @@ import com.facebook.login.LoginManager;
 public class MenuCliente extends AppCompatActivity {
 
     String user;
+    int pago;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +25,7 @@ public class MenuCliente extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         user = bundle.getString("Username");
+        pago=bundle.getInt("pago");
     }
 
     public void reservar(View d){

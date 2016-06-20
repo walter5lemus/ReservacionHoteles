@@ -23,6 +23,7 @@ public class ConsultarTransacciones extends AppCompatActivity implements Adapter
     ListView listViewDocentes;
     static List<String> nombreDocentes;
     String user;
+    int pago;
 
 
     @Override

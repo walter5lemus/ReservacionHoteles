@@ -5,7 +5,7 @@ package com.example.truenoblanco.proyecto2;
  */
 public class Conexion {
 
-    public String URLLocal = "http://192.168.1.6";
+    public String URLLocal = "http://192.168.1.13";
     public String URLServerLocal = "http://192.168.1.6";
     //public String URLServerPublico = "";
     public Conexion(){}

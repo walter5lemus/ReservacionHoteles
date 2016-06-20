@@ -53,6 +53,8 @@
         <activity android:name=".ConsultarTransacciones"></activity>
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".ImageActivity"></activity>
+        <activity android:name=".Main2"></activity>
+        <activity android:name=".Qr"></activity>
     </application>
 
 </manifest>

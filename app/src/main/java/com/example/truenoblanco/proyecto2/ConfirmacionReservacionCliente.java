@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.Result;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
 import com.paypal.android.sdk.payments.PayPalPayment;
 import com.paypal.android.sdk.payments.PayPalService;
@@ -31,16 +28,15 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
+public class ConfirmacionReservacionCliente extends Activity {
 
-public class ConfirmacionReservacionCliente extends Activity implements ZXingScannerView.ResultHandler{
-    private ZXingScannerView mScannerView;
-    String persona,user;
+    String persona,user,promocion;
     String tipoHabitacion,codHabitacion;
     String fechaInicio, fechaFinal;
     Float precio;
+    float promo, descuento;
     TextView mensaje,mensaje2,mensaje3;
-    Date fecha1;
+    int pago;
 
 
     Conexion conn;
@@ -78,14 +74,14 @@ public class ConfirmacionReservacionCliente extends Activity implements ZXingSca
         mensaje2 = (TextView) findViewById(R.id.Precio);
         mensaje3=(TextView) findViewById(R.id.precio2);
 
-        /*Button confirmar = (Button) findViewById(R.id.ButtonConfirmar);
+        Button confirmar = (Button) findViewById(R.id.buttonPaypal);
         confirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 pagar();
             }
-        });*/
+        });
         try{
         Bundle bundle = getIntent().getExtras();
         persona = bundle.getString("personas");
@@ -95,17 +91,21 @@ public class ConfirmacionReservacionCliente extends Activity implements ZXingSca
         precio = bundle.getFloat("precio");
         codHabitacion = bundle.getString("codhabitacion");
         user = bundle.getString("Username");
-
-
-
-
+        promocion = bundle.getString("promocion");
+        promo = (Float.parseFloat(promocion))/100;
         }
         catch(Exception e){
             e.getStackTrace();
         }
 
+        if(promo>0){
+            descuento = precio*promo;
+        }
+        precio=precio-descuento;
 
-        mensaje.setText("RESERVA DESDE "+fechaInicio+ "\nHASTA "+fechaFinal+"\nPARA "+persona+"PERSONAS\nTIPO DE HABITACION "+tipoHabitacion+"\nNUMERO DE HABITACION "+codHabitacion);
+
+        mensaje.setText("RESERVA DESDE "+fechaInicio+ "\nHASTA "+fechaFinal+"\nPARA "+persona+"PERSONAS\nTIPO DE HABITACION "+tipoHabitacion+"\nNUMERO " +
+                "DE HABITACION "+codHabitacion+"\nCon un descuento de: "+promocion+"%");
         mensaje2.setText("CON UN TOTAL A PAGAR DE \n");
         mensaje3.setText("$"+precio);
 
@@ -146,6 +146,29 @@ public class ConfirmacionReservacionCliente extends Activity implements ZXingSca
 
 
     }
+    public void qr(View v){
+        if (v.getId()==R.id.botonQr){
+
+            Class<?> clase= null;
+            try {
+                clase = Class.forName("com.example.truenoblanco.proyecto2.Qr");
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            Intent inte = new Intent(this,clase);
+            inte.putExtra("fechainicio",fechaInicio);
+            inte.putExtra("fechafinal",fechaFinal);
+            inte.putExtra("personas",persona);
+            inte.putExtra("tipohabitacion",tipoHabitacion);
+            inte.putExtra("codhabitacion",codHabitacion);
+            inte.putExtra("precio",precio);
+            inte.putExtra("Username",user);
+
+            startActivity(inte);
+        }
+
+    }
 
     public void regresar(View v){
         if (v.getId()==R.id.brnRegresarConfirmacion){
@@ -169,7 +192,7 @@ public class ConfirmacionReservacionCliente extends Activity implements ZXingSca
 
     public void pagar(){
 
-        PayPalPayment pago = new PayPalPayment(new BigDecimal(precio),"USD", "Hotel El Papu",
+        PayPalPayment pago = new PayPalPayment(new BigDecimal(precio),"USD", "Hotel Decameron",
                 PayPalPayment.PAYMENT_INTENT_SALE);
 
         Intent intent = new Intent(ConfirmacionReservacionCliente.this, PaymentActivity.class);
@@ -187,6 +210,17 @@ public class ConfirmacionReservacionCliente extends Activity implements ZXingSca
             if (resultCode == Activity.RESULT_OK) {
 
                 Toast.makeText(getApplicationContext(), "Pago realizado correctamente", Toast.LENGTH_LONG).show();
+                    Class<?> clase= null;
+                    try {
+                        clase = Class.forName("com.example.truenoblanco.proyecto2.MenuCliente");
+
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    Intent inte = new Intent(this,clase);
+                    startActivity(inte);
+                }
+
 
             }
 
@@ -202,36 +236,7 @@ public class ConfirmacionReservacionCliente extends Activity implements ZXingSca
             }
         }
     }
-    public void QrScanner(View view){
-
-        mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
-        setContentView(mScannerView);
-        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
-        mScannerView.startCamera();         // Start camera
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mScannerView.stopCamera();   // Stop camera on pause
-    }
 
 
-    @Override
-    public void handleResult(Result rawResult) {
-        // Do something with the result here
 
-        Log.e("handler", rawResult.getText()); // Prints scan results
-        Log.e("handler", rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode)
 
-        // show the scanner result into dialog box.
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Scan Result");
-        builder.setMessage(rawResult.getText());
-        AlertDialog alert1 = builder.create();
-        alert1.show();
-
-        // If you would like to resume scanning, call this method below:
-        // mScannerView.resumeCameraPreview(this);
-    }
-}

@@ -22,15 +22,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ReservasCliente extends AppCompatActivity implements AdapterView.OnItemClickListener {
-
+public class ReservasCliente extends AppCompatActivity implements AdapterView.OnItemClickListener{
     ControlBD helper;
 
     ProgressDialog progressDialog;
     int año,mes,dia,año2,mes2,dia2;
-    Spinner spinnerPro;
     EditText personas, campoFecha,campoFecha2;
-    Button BotonFecha,BotonFecha2;
+    Button BotonFecha,BotonFecha2,botonQr;
     Calendar calendario,calendario2,actual;
     Date fechaActual;
     static List<Habitacion> listaHabitaciones;
@@ -103,6 +101,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         };
 
 
+
         personas = (EditText) findViewById(R.id.edtPersonaReservacion);
         ArrayAdapter adapPromo = ArrayAdapter.createFromResource(this, R.array.promo, android.R.layout.simple_spinner_dropdown_item);
         adapPromo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -159,7 +158,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
     }
 
 
-
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         Habitacion habitacion = listaHabitaciones.get(position);
@@ -183,6 +181,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
                         e.printStackTrace();
                     }
                             precio = precio*dias;
+                            String promocion="";
                             Intent inte = new Intent(this,clase);
                             inte.putExtra("fechainicio",campoFecha.getText().toString());
                             inte.putExtra("fechafinal",campoFecha2.getText().toString());

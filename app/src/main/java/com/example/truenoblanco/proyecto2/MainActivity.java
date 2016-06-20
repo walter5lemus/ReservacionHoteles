@@ -117,10 +117,12 @@ public class MainActivity extends ActionBarActivity {
 
                     if(password==1)
                     {
+                        int pago=0;
                         FacebookSdk.sdkInitialize(getApplicationContext());
                         LoginManager.getInstance().logOut();
                         Intent i = new Intent(MainActivity.this, MenuCliente.class);
                         i.putExtra("Username",str);
+                        i.putExtra("pago",pago);
                         startActivity(i);
                     }
                     else
