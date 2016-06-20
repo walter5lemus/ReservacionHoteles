@@ -14,11 +14,19 @@
         android:gravity="center_vertical|center_horizontal"
         >
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¿Tiene Alguna promocion?"
+            android:id="@+id/button2"
+            android:layout_gravity="center_horizontal"
+            android:onClick="QrScanner" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="RESERVACION FINALIZADA!"
+            android:text="RESERVACION CASI FINALIZADA!"
             android:id="@+id/textView" />
 
         <LinearLayout
@@ -65,6 +73,14 @@
             android:id="@+id/ButtonConfirmar"
             android:layout_gravity="center_horizontal"
             android:onClick="insertarTransaccion" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pago con Paypal"
+            android:id="@+id/button"
+            android:layout_gravity="center_horizontal"
+            android:onClick="pagar" />
 
         <Button
             android:layout_width="wrap_content"
