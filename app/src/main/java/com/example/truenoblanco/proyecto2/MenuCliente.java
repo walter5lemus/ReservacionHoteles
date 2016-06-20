@@ -29,20 +29,25 @@ public class MenuCliente extends AppCompatActivity {
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.show();
         Intent inicioReservar=new Intent(this,ReservasCliente.class);
-        inicioReservar.putExtra("Username",user);
+        inicioReservar.putExtra("Username", user);
 
         startActivity(inicioReservar);
         progressDialog.dismiss();
     }
     public void promociones(View d){
         Intent iniPromociones=new Intent(this,Promociones.class);
-        iniPromociones.putExtra("Username",user);
+        iniPromociones.putExtra("Username", user);
         startActivity(iniPromociones);
     }
 
    public void ConsultarTransacciones(View v){
         Intent intent = new Intent(this, ConsultarTransacciones.class);
        intent.putExtra("Username",user);
+        startActivity(intent);
+    }
+
+    public void TipoHabitaciones(View v){
+        Intent intent = new Intent(this, ImageActivity.class);
         startActivity(intent);
     }
 
