@@ -37,11 +37,11 @@ public class MenuCliente extends AppCompatActivity {
         progressDialog.show();
 
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        if(accessToken != null){
+        if(accessToken == null){
             Toast toast1 = Toast.makeText(getApplicationContext(), "Para realizar una reservación necesitas crear un usuario.", Toast.LENGTH_SHORT);
             toast1.show();
 
-            Intent i = new Intent(MenuCliente.this,Main2.class);
+            Intent i = new Intent(MenuCliente.this,MainActivity.class);
             startActivity(i);
             progressDialog.show();
         }

@@ -59,6 +59,7 @@ public class MainActivity extends ActionBarActivity {
                                 + loginResult.getAccessToken().getToken()
                 );*/
                 Intent i = new Intent(MainActivity.this, MenuCliente.class);
+                i.putExtra("Username",loginResult.getAccessToken().getUserId());
                 startActivity(i);
             }
 
