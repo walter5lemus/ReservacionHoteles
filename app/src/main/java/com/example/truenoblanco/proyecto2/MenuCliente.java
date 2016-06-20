@@ -16,8 +16,6 @@ public class MenuCliente extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         user = bundle.getString("Username");
-
-
     }
 
     public void reservar(View d){
@@ -38,6 +36,11 @@ public class MenuCliente extends AppCompatActivity {
         Intent iniPromociones=new Intent(this,Promociones.class);
         iniPromociones.putExtra("Username",user);
         startActivity(iniPromociones);
+    }
+
+    public void TipoHabitaciones(View v){
+        Intent intent = new Intent(this, ImageActivity.class);
+        startActivity(intent);
     }
 
    public void ConsultarTransacciones(View v){
