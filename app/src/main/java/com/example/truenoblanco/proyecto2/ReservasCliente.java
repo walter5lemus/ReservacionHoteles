@@ -4,8 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,12 +16,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +31,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
     Spinner spinnerPro;
     EditText personas, campoFecha,campoFecha2;
     Button BotonFecha,BotonFecha2;
-    Calendar calendario,calendario2;
+    Calendar calendario,calendario2,actual;
     Date fechaActual;
     static List<Habitacion> listaHabitaciones;
     static List<Transaccion> listaTransaccion;
@@ -49,10 +46,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
     private static final  int TIPO_DIALOGO = 0;
     private static final  int TIPO_DIALOGO2 = 1;
 
-
-
-
-    @Override
+  @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservas_cliente);
@@ -63,7 +57,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         listaTransaccion = new ArrayList<Transaccion>();
         conn=new Conexion();
         progressDialog = new ProgressDialog(this);
-        updateDisponible();
 
         Bundle bundle = getIntent().getExtras();
         user = bundle.getString("Username");
@@ -75,6 +68,8 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         mes = calendario.get(Calendar.MONTH)+1;
         dia = calendario.get(Calendar.DAY_OF_MONTH);
         calendario.set(año,mes,dia);
+         actual = Calendar.getInstance();
+         actual.set(año,mes,dia);
         mostrarFecha();
         oyenteSelectorFecha = new DatePickerDialog.OnDateSetListener()
         {
@@ -109,10 +104,9 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
 
 
         personas = (EditText) findViewById(R.id.edtPersonaReservacion);
-        spinnerPro = (Spinner) findViewById(R.id.spPromociones);
         ArrayAdapter adapPromo = ArrayAdapter.createFromResource(this, R.array.promo, android.R.layout.simple_spinner_dropdown_item);
         adapPromo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPro.setAdapter(adapPromo);
+
 
         listViewHabitaciones = (ListView) findViewById(R.id.listView);
         int disponible = 1;
@@ -120,10 +114,12 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         url=conn.getURLLocal()+"/etapa2/ws_db_consultarHabitacion.php?disponible="+disponible;
 
         String materiasExternas ="";
+        updateDisponible();
 
         materiasExternas = ControladorServicio.obtenerRespuestaPeticion(url,this);
         try {
             listaHabitaciones.addAll(ControladorServicio.obtenerHabitacionesExternas(materiasExternas, this));
+            updateDisponible();
             actualizarListView();
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,17 +138,18 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
             e.printStackTrace();
         }
 
-
     }
 
     public void updateDisponible(){
-        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");//dd/MM/yyyy
         Date fechaActual = new Date();
         fechaActual.getTime();
 
         Date fechaFinal;
         for (int i = 0; i < listaTransaccion.size(); i++) {
             fechaFinal = listaTransaccion.get(i).getFechaFinal();
+
+            System.out.println(actual);
+            System.out.println(fechaFinal);
             if (fechaActual.after(fechaFinal)){
                 String url2="";
                 url2=conn.getURLLocal()+"/etapa2/ws_db_updateDisponible.php?codhabitacion="+listaTransaccion.get(i).getCodHabitacion();
@@ -167,10 +164,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
 
         Habitacion habitacion = listaHabitaciones.get(position);
         int numPersona;
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Espere...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.show();
+
 
         Float precio = habitacion.getPrecio();
 
@@ -179,7 +173,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         long dias= TimeUnit.MILLISECONDS.toDays(Math.abs(end - start));
 
             if(calendario.before(calendario2)){
-
                    try{
                         numPersona = Integer.parseInt(personas.getText().toString());
                         if(habitacion.getMaxPersonas()>=numPersona){
@@ -189,7 +182,6 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
-
                             precio = precio*dias;
                             Intent inte = new Intent(this,clase);
                             inte.putExtra("fechainicio",campoFecha.getText().toString());
@@ -199,10 +191,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
                             inte.putExtra("codhabitacion",habitacion.getCodHabitacion());
                             inte.putExtra("precio",precio);
                             inte.putExtra("Username",user);
-
-
-
-                            this.startActivity(inte);
+                           this.startActivity(inte);
                     }
                     else{
                     Toast.makeText(ReservasCliente.this, "El numero de personas excede al permitido", Toast.LENGTH_SHORT).show();
@@ -215,14 +204,13 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
 
             }else
                 Toast.makeText(ReservasCliente.this, "La fecha de inicio tiene que ser antes que la fecha final", Toast.LENGTH_SHORT).show();
-
     }
 
     private void actualizarListView() {
         String dato = "";
         nombreHabitaciones.clear();
         for (int i = 0; i < listaHabitaciones.size(); i++) {
-            dato = "Tipo Habitación:"+listaHabitaciones.get(i).getTipoHabitacion() + "\nDescripcion: "
+            dato = "Codigo Habitacion: "+listaHabitaciones.get(i).getCodHabitacion()+"\nTipo Habitación:"+listaHabitaciones.get(i).getTipoHabitacion() + "\nDescripcion: "
                     +listaHabitaciones.get(i).getDescripcion() + "\nPrecio: $"
                     +listaHabitaciones.get(i).getPrecio();
 

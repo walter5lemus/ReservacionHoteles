@@ -18,7 +18,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".VideoActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,9 +49,7 @@
             android:name="io.card.payment.CardIOActivity"
             android:configChanges="keyboardHidden|orientation" />
         <activity android:name="io.card.payment.DataEntryActivity" />
-        <activity android:name=".ConsultarTransacciones" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ImageActivity"/>
+        <activity android:name=".ConsultarTransacciones"></activity>
     </application>
 
 </manifest>

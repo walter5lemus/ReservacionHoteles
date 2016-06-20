@@ -1,36 +1,29 @@
 package com.example.truenoblanco.proyecto2;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.truenoblanco.proyecto2.login.Contact;
 import com.example.truenoblanco.proyecto2.login.DatabaseH;
 import com.example.truenoblanco.proyecto2.login.SignUp;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends ActionBarActivity {
 
-    private TextView info;
-    private LoginButton loginButton;
-    private CallbackManager callbackManager;
+public class Main2 extends ActionBarActivity {
 
     static List<Contact> listaClientes;
     Conexion conn;
@@ -39,50 +32,13 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-
-        setContentView(R.layout.activity_main);
-
-        info = (TextView)findViewById(R.id.info);
-        loginButton = (LoginButton)findViewById(R.id.login_button);
-
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                /*info.setText(
-                        "User ID: "
-                                + loginResult.getAccessToken().getUserId()
-                                + "\n" +
-                                "Auth Token: "
-                                + loginResult.getAccessToken().getToken()
-                );*/
-                Intent i = new Intent(MainActivity.this, MenuCliente.class);
-                startActivity(i);
-            }
-
-            @Override
-            public void onCancel() {
-                info.setText("Intento de acceder cancelado.");
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                info.setText("Intento de acceder fallido.");
-            }
-        });
+        setContentView(R.layout.activity_main2);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                 .permitAll().build();
         StrictMode.setThreadPolicy(policy);
         conn=new Conexion();
         listaClientes = new ArrayList<Contact>();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -96,7 +52,6 @@ public class MainActivity extends ActionBarActivity {
     {
         if(v.getId() == R.id.Blogin)
         {
-
             EditText a = (EditText)findViewById(R.id.TFusername);
             String str = a.getText().toString();
             EditText b = (EditText)findViewById(R.id.TFpassword);
@@ -108,9 +63,10 @@ public class MainActivity extends ActionBarActivity {
                 int password;
 
                 password = ControladorServicio.respuesta(url,this);
+                System.out.println(password);
 
                 if ( str.equals("") || pass.equals("")){
-                    Toast temp = Toast.makeText(MainActivity.this, "Ingrese los campos mostrados!", Toast.LENGTH_SHORT);
+                    Toast temp = Toast.makeText(Main2.this, "Ingrese los campos mostrados!", Toast.LENGTH_SHORT);
                     temp.show();
                 }
                 else {
@@ -119,20 +75,21 @@ public class MainActivity extends ActionBarActivity {
                     {
                         FacebookSdk.sdkInitialize(getApplicationContext());
                         LoginManager.getInstance().logOut();
-                        Intent i = new Intent(MainActivity.this, MenuCliente.class);
+                        Intent i = new Intent(Main2.this, MenuCliente.class);
                         i.putExtra("Username",str);
                         startActivity(i);
+
                     }
                     else
                     {
-                        Toast temp = Toast.makeText(MainActivity.this, "Usuario y contrasena incorrecta!", Toast.LENGTH_SHORT);
+                        Toast temp = Toast.makeText(Main2.this, "Usuario y contrasena incorrecta!", Toast.LENGTH_SHORT);
                         temp.show();
                     }
                 }
 
             } catch (Exception e) {
                 Toast.makeText(this, "Error de conexion", Toast.LENGTH_LONG).show();
-        }
+            }
 
         }
         if(v.getId() == R.id.Bsignup)
@@ -142,11 +99,10 @@ public class MainActivity extends ActionBarActivity {
             progressDialog.setMessage("Espere...");
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
-            Intent i = new Intent(MainActivity.this, SignUp.class);
+            Intent i = new Intent(Main2.this, SignUp.class);
             startActivity(i);
             progressDialog.dismiss();
         }
-
     }
 
     @Override
@@ -162,5 +118,24 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        new AlertDialog.Builder(this)
+                .setMessage("Recuerda que para realizar una reservación necesitas crear un usuario aun así quieres salir?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        Main2.this.finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    protected void onPause(){
+        super.onPause();
+        finish();       //termina la actividad
     }
 }

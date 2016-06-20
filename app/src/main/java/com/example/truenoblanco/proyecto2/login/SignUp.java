@@ -85,5 +85,8 @@ public class SignUp extends Activity {
         }
     }
     }
-
+    protected void onPause(){
+        super.onPause();
+        finish();       //termina la actividad
+    }
 }
