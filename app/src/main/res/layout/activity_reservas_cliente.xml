@@ -36,7 +36,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Fecha Inicial"
             android:id="@+id/textView9"
-            android:layout_weight="0.29" />
+            android:layout_weight="0.29"
+            android:textSize="15dp" />
 
         <EditText
             android:layout_width="135dp"
@@ -48,6 +49,14 @@
             android:clickable="false"
             android:editable="true"
             android:layout_weight="0.16" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar Fecha"
+            android:id="@+id/botonFecha"
+            android:textSize="9dp"
+            android:onClick="mostrarCalendario" />
 
     </LinearLayout>
 

@@ -62,12 +62,12 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         listaTransaccion = new ArrayList<Transaccion>();
         conn=new Conexion();
         progressDialog = new ProgressDialog(this);
-        updateDisponible();
 
         Bundle bundle = getIntent().getExtras();
         user = bundle.getString("Username");
 
         campoFecha = (EditText) findViewById(R.id.campoFecha);
+        BotonFecha = (Button) findViewById(R.id.botonFecha);
         calendario = Calendar.getInstance();
         año = calendario.get(Calendar.YEAR);
         mes = calendario.get(Calendar.MONTH)+1;
@@ -119,10 +119,12 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         url=conn.getURLLocal()+"/etapa2/ws_db_consultarHabitacion.php?disponible="+disponible;
 
         String materiasExternas ="";
+        updateDisponible();
 
         materiasExternas = ControladorServicio.obtenerRespuestaPeticion(url,this);
         try {
             listaHabitaciones.addAll(ControladorServicio.obtenerHabitacionesExternas(materiasExternas, this));
+            updateDisponible();
             actualizarListView();
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,17 +143,18 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
             e.printStackTrace();
         }
 
-
     }
 
     public void updateDisponible(){
-        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd");//dd/MM/yyyy
         Date fechaActual = new Date();
         fechaActual.getTime();
 
         Date fechaFinal;
         for (int i = 0; i < listaTransaccion.size(); i++) {
             fechaFinal = listaTransaccion.get(i).getFechaFinal();
+
+            System.out.println(actual);
+            System.out.println(fechaFinal);
             if (fechaActual.after(fechaFinal)){
                 String url2="";
                 url2=conn.getURLLocal()+"/etapa2/ws_db_updateDisponible.php?codhabitacion="+listaTransaccion.get(i).getCodHabitacion();
@@ -212,7 +215,7 @@ public class ReservasCliente extends AppCompatActivity implements AdapterView.On
         String dato = "";
         nombreHabitaciones.clear();
         for (int i = 0; i < listaHabitaciones.size(); i++) {
-            dato = "Tipo Habitación:"+listaHabitaciones.get(i).getTipoHabitacion() + "\nDescripcion: "
+            dato = "Codigo Habitacion: "+listaHabitaciones.get(i).getCodHabitacion()+"\nTipo Habitación:"+listaHabitaciones.get(i).getTipoHabitacion() + "\nDescripcion: "
                     +listaHabitaciones.get(i).getDescripcion() + "\nPrecio: $"
                     +listaHabitaciones.get(i).getPrecio();
 
