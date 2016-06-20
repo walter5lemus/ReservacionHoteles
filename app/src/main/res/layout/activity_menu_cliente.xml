@@ -33,6 +33,14 @@
             android:id="@+id/button4"
             android:background="#c1d3fb"
             android:onClick="ConsultarTransacciones" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tipo de habitaciones"
+            android:id="@+id/button9"
+            android:background="#c1d3fb"
+            android:onClick="TipoHabitaciones" />
+
 
 
         <Button

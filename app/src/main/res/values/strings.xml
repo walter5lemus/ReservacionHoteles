@@ -4,6 +4,12 @@
 
     <string name="facebook_app_id">857873447691521</string>
 
+
+    <string name="title_logo">RESERVACION DE HOTELES</string>
+    <string name="btn_play">REPRODUCIR VIDEO</string>
+    <string name="btn_skip_intro">SALTAR VIDEO</string>
+
+
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_logeo">Logeo</string>
@@ -97,6 +103,7 @@
     <string name="title_activity_habitacion">habitacion</string>
     <string name="title_activity_ampliar_reserva">AmpliarReserva</string>
     <string name="title_activity_mantenimiento_reservas">MantenimientoReservas</string>
+    <string name="mensajevideo">Haga Click arriba de este mensaje</string>
 
 
 </resources>
