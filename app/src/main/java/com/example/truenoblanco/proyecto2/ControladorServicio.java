@@ -5,12 +5,8 @@ package com.example.truenoblanco.proyecto2;
  */
 
 import android.content.Context;
-import android.database.Cursor;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.example.truenoblanco.proyecto2.login.Contact;
-import com.example.truenoblanco.proyecto2.login.SignUp;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -29,9 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class ControladorServicio {

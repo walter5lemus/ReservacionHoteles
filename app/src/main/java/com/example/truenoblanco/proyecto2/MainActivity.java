@@ -4,29 +4,27 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
-
 import android.widget.TextView;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
+import android.widget.Toast;
 
 import com.example.truenoblanco.proyecto2.login.Contact;
 import com.example.truenoblanco.proyecto2.login.DatabaseH;
 import com.example.truenoblanco.proyecto2.login.SignUp;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class MainActivity extends ActionBarActivity {
 
@@ -53,28 +51,25 @@ public class MainActivity extends ActionBarActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                info.setText(
+                /*info.setText(
                         "User ID: "
                                 + loginResult.getAccessToken().getUserId()
                                 + "\n" +
                                 "Auth Token: "
                                 + loginResult.getAccessToken().getToken()
-
-                );
+                );*/
                 Intent i = new Intent(MainActivity.this, MenuCliente.class);
                 startActivity(i);
-
-
             }
 
             @Override
             public void onCancel() {
-                info.setText("Login attempt canceled.");
+                info.setText("Intento de acceder cancelado.");
             }
 
             @Override
             public void onError(FacebookException error) {
-                info.setText("Login attempt failed.");
+                info.setText("Intento de acceder fallido.");
             }
         });
 
@@ -122,11 +117,11 @@ public class MainActivity extends ActionBarActivity {
 
                     if(password==1)
                     {
-
+                        FacebookSdk.sdkInitialize(getApplicationContext());
+                        LoginManager.getInstance().logOut();
                         Intent i = new Intent(MainActivity.this, MenuCliente.class);
                         i.putExtra("Username",str);
                         startActivity(i);
-
                     }
                     else
                     {

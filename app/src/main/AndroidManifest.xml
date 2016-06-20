@@ -49,6 +49,7 @@
             android:name="io.card.payment.CardIOActivity"
             android:configChanges="keyboardHidden|orientation" />
         <activity android:name="io.card.payment.DataEntryActivity" />
+        <activity android:name=".Main2"></activity>
         <activity android:name=".ConsultarTransacciones"></activity>
     </application>
 
